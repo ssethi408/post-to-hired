@@ -1,0 +1,10 @@
+# Your personal data. Never commit it.
+profile/
+tracker/
+*.docx
+*.pdf
+.DS_Store
+
+# Private notes from calls and conversations. Never commit them.
+*call-notes*
+**/references/*-notes.md
