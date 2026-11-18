@@ -2,6 +2,7 @@
   "name": "post-to-hired",
   "owner": { "name": "ssethi408" },
   "plugins": [
+    { "name": "setup", "source": "./plugins/setup", "description": "Interviews you once and builds the profile every other skill reads." },
     { "name": "linkedin-content", "source": "./plugins/linkedin-content", "description": "Plan, write, humanize and gate LinkedIn posts in your own voice." },
     { "name": "job-search", "source": "./plugins/job-search", "description": "Tailor your resume to each job and run your job search pipeline." }
   ]

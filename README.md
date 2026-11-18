@@ -6,6 +6,12 @@ Every skill holds the method. Your name, voice, stories and targets live in a `p
 
 ## What's inside
 
+**`setup` plugin**
+
+| Skill | What it does |
+|---|---|
+| `setup` | Interviews you once and writes your profile: targets, settings, story bank, voice, LinkedIn author profile. Ends with a privacy check |
+
 **`linkedin-content` plugin**
 
 | Skill | What it does |
@@ -34,13 +40,18 @@ Interviewer styles included: recruiter screen, hiring manager, skeptical bar-rai
 
 ```
 /plugin marketplace add ssethi408/post-to-hired
+/plugin install setup@post-to-hired
 /plugin install linkedin-content@post-to-hired
 /plugin install job-search@post-to-hired
 ```
 
-Only want one half? Install just that plugin.
+Only want one half? Install `setup` plus just that plugin.
 
-**2. Make your profile.** Create a working folder for your job search, copy `profile-template/` into it as `profile/`, and start Claude from that folder. The skills look for `profile/` there.
+**2. Make your profile.** Create a working folder for your job search, start Claude from it, and say *"set me up"*. The `setup` skill interviews you in short rounds, pulls what it can from your resume and a few things you've written, and writes your `profile/` folder. Quick mode takes about 10 minutes, full mode about 30.
+
+Want to see a finished profile first? `examples/maya-okafor/` is a complete one for a fictional product manager. Copy its `profile/` folder into your working folder to try the skills before writing your own.
+
+Prefer to fill it in by hand? Copy `profile-template/` into your working folder as `profile/`.
 
 ```
 job-search/
@@ -49,7 +60,7 @@ job-search/
     ├── voice.md            how you write
     ├── about-me.md         your story bank
     ├── targets.md          what you're looking for
-    ├── settings.md         where your resume lives, where PDFs go
+    ├── settings.md         where your resume lives, where PDFs go, where the tracker lives
     └── interview-rubric.md optional
 ```
 

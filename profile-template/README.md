@@ -1,6 +1,6 @@
 # Your profile
 
-Copy this folder to a `profile/` folder inside the working folder you start Claude in, then fill it in. If you keep it inside a clone of this repo, it is gitignored.
+The easiest way to fill this in is the `setup` skill: start Claude in your working folder and say "set me up". To do it by hand, copy this folder to a `profile/` folder inside the working folder you start Claude in, then fill it in. For a finished example, see `examples/maya-okafor/profile/`. If you keep it inside a clone of this repo, it is gitignored.
 
 | File | Used by | What goes in it |
 |---|---|---|
