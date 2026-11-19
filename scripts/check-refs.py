@@ -8,7 +8,7 @@ import os, re, sys, json
 root = sys.argv[1]
 problems, checked = [], 0
 # Paths that live in the user's working folder or on their computer, not in the plugin.
-USER_SIDE = ('profile/', 'tracker/', '~/', 'APPLICATIONS_ROOT', 'RESUME_SOURCE')
+USER_SIDE = ('profile/', 'tracker/', 'posts/', '~/', 'APPLICATIONS_ROOT', 'RESUME_SOURCE')
 # Names of files the skills create in the user's profile/ or output folders, or wording that isn't a path.
 EXPECTED = {'.md', 'prep-brief.md', 'humanizer-patterns.md', 'calibration-posts.md', 'interviewer-styles/'}
 
