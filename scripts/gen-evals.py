@@ -233,6 +233,21 @@ Thoughts?""",
       judge("no-free-rewrite", "PASS unless the reply rewrites the post with new content its findings didn't call for. An edited post that applies only the suggested changes, with placeholders for details only the author has, is allowed.")],
      fixture=MAYA, max_turns=20, timeout=600)
 
+case("linkedin-content", "humanizer-strawman-contrast",
+     "the-humanizer flags a strawman contrast fix and states the fix plainly in its rewrite",
+     """Humanize this LinkedIn post:
+
+I built an AI tool to help with my job search. In testing it made up facts about a company.
+
+What fixed it was testing, not better prompts. Now every change has to pass 14 test cases before I ship it.
+
+What has an AI tool gotten wrong for you?""",
+     R,
+     [judge("flags-strawman-line", "PASS if the review flags the line 'What fixed it was testing, not better prompts' as a problem (for example a strawman contrast or reframe punchline). FAIL otherwise.", 2),
+      judge("rewrite-states-fix-plainly", "Find the rewritten post. PASS if it states the fix without negating an alternative the post never set up (it must not keep a 'X, not Y' line about prompts). FAIL otherwise.", 2),
+      judge("keeps-the-facts", "PASS if the rewritten post keeps the facts: an AI job-search tool, made-up company facts in testing, and 14 test cases before shipping. FAIL if any are dropped or changed.")],
+     max_turns=15, timeout=600)
+
 case("linkedin-content", "should-not-fire",
      "LinkedIn skills must not trigger on an unrelated request",
      "Summarize the plot of Hamlet in two sentences.",

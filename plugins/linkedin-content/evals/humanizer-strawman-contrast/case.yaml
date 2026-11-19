@@ -1,0 +1,33 @@
+schema_version: "1.1"
+name: humanizer-strawman-contrast
+description: "the-humanizer flags a strawman contrast fix and states the fix plainly in its rewrite"
+tags: [core]
+runs: 3
+execution:
+  prompt: |
+    Humanize this LinkedIn post:
+
+    I built an AI tool to help with my job search. In testing it made up facts about a company.
+
+    What fixed it was testing, not better prompts. Now every change has to pass 14 test cases before I ship it.
+
+    What has an AI tool gotten wrong for you?
+  max_turns: 15
+  timeout_seconds: 600
+  allowed_tools: [Read, Glob, Grep, Skill]
+graders:
+  - name: flags-strawman-line
+    type: llm
+    weight: 2
+    criteria: |
+      PASS if the review flags the line 'What fixed it was testing, not better prompts' as a problem (for example a strawman contrast or reframe punchline). FAIL otherwise.
+  - name: rewrite-states-fix-plainly
+    type: llm
+    weight: 2
+    criteria: |
+      Find the rewritten post. PASS if it states the fix without negating an alternative the post never set up (it must not keep a 'X, not Y' line about prompts). FAIL otherwise.
+  - name: keeps-the-facts
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the rewritten post keeps the facts: an AI job-search tool, made-up company facts in testing, and 14 test cases before shipping. FAIL if any are dropped or changed.

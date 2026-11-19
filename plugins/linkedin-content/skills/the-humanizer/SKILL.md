@@ -116,6 +116,7 @@ Scan the post for AI markers at two levels:
 - Subjectless pressure or blame: an abstract noun doing the work of a person ("The pressure was to show AI was in use"). The reader can't tell who wanted what. Name the actor ("Everyone was under pressure to show they were using AI").
 - Teaser close with nothing behind it: "More on what I learned soon." Keep it only if the follow-up post is scheduled this week; otherwise cut it or end on a narrow question for the reader.
 - Repeated lead word in a triplet: "Different backgrounds, different starting points, and a lot of curiosity." Cut to the one concrete detail a reader could picture.
+- Strawman contrast fix: stating what worked by negating an alternative nobody proposed ("What fixed it was testing, not better prompts."). It reads as a reframe punchline. State the fix plainly ("The fix was a test suite.") and keep the contrast only if the post actually set up the other option.
 
 List every flagged item with the exact quote and line location.
 
