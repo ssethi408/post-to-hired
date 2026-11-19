@@ -113,6 +113,9 @@ REACH posts pass with an implicit opening (a story a reader can match with their
 
 ### CHECK output
 
+Before checking, read the author profile: `profile/author.md` in the working folder you were started in (or `profile/authors/<name>.md` for someone else). Rules 1, 2, 3 and 4 depend on its readers, last posts and jargon list. Only if that file truly doesn't exist, use the no-profile fallback from SETUP.
+
+
 ```
 STAGE: <REACH|TEACH|CONVERSATION>   last two: <X, Y>
 RULES: <n>/5 pass

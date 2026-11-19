@@ -14,6 +14,8 @@ Original spirit, kept intact: **caution over speed. Doing less, correctly, beats
 - The user pastes one or more LinkedIn posts (drafts or already published) and asks to run them through Karpathy, check them, tighten them, or "karpathy this".
 - Several posts at once: review each separately, then add a short cross-post pattern section at the end.
 
+Before reviewing, read `profile/author.md` and `profile/voice.md` from the working folder if they exist. They tell you who the author's readers are, which jargon those readers already know, and how the author writes, so you don't flag terms the target reader uses every day or rewrite away the author's style.
+
 This is a review, not a rewrite. If they want a new post written, that is the linkedin-post skill's job. If they want funnel-stage or reach diagnosis, pair with linkedin-funnel-playbook. This skill can run before or after either.
 
 ## The four principles, translated for posts

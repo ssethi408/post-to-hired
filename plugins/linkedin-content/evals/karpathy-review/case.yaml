@@ -24,5 +24,5 @@ graders:
     type: llm
     weight: 3
     criteria: |
-      PASS if the reply states the post's point in one sentence, names a reader and goal, gives a scorecard for Think Before Writing, Simplicity and Goal-Driven, lists findings that quote exact lines from the post (the 'fast-moving landscape... leverage data...' line and the 'Thoughts?' close should be among them), and does not return a full rewritten post unprompted. FAIL otherwise.
+      PASS if the reply states the post's point in one sentence, names a reader and goal, gives a scorecard for Think Before Writing, Simplicity and Goal-Driven, lists findings that quote exact lines from the post (the 'fast-moving landscape... leverage data...' line and the 'Thoughts?' close should be among them), and does not rewrite the post beyond its own findings. An 'edited post' that applies only the suggested changes (with placeholders for details only the author has) is allowed and expected when there are 3 or more findings. FAIL if the findings don't quote the post, or if it produces a rewrite with new content the findings didn't call for.
 
