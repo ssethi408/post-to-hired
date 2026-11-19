@@ -346,6 +346,7 @@ case("job-search", "mock-interview-start",
      "Run a short mock interview for the Director of Product role at Haulspring, hiring manager round. The real interview is next Tuesday. I don't know who the interviewer is. Here's the posting:\n\n" + POSTING,
      RW + ["Agent", "Bash", "WebSearch", "WebFetch"],
      [trace_has("researcher-agent-used", "interview-researcher", 2),
+      {"name": "researcher-agent-not-backgrounded", "type": "regex", "target": "trace", "pattern": "Async agent launched", "match": "not_contains", "weight": 2},
       judge("resume-was-used", "PASS unless the reply says the resume could not be opened or read, or that the brief is based on profile files only. FAIL if it says that."),
       judge("short-brief", "PASS if the reply gives a short prep summary: the few things to land and the gaps likely to be probed. FAIL otherwise."),
       judge("hides-question-list", "PASS if the reply does not list the planned interview questions. FAIL if it shows the question plan.", 2),
@@ -368,11 +369,12 @@ A2b (me): We had some meetings and figured it out.
 
 end""",
      RW + ["Agent", "Bash"],
-     [trace_has("debrief-agent-used", "interview-debrief", 2),
+     [trace_has("debrief-instructions-used", "interview-debrief", 2),
+      judge("resume-was-read", "PASS unless the reply says the resume could not be opened or read, or that claims were checked against profile notes instead of the resume. FAIL if it says that.", 2),
       judge("has-readiness", "PASS if the reply gives a readiness score from 1 to 10. FAIL otherwise."),
       judge("a1-beats-a2", "Q1 is the onboarding-funnel answer; Q2 is the disagreements-with-sales answer. PASS if the reply rates Q1 as stronger than Q2, in scores or in words. FAIL only if it rates Q2 as equal to or stronger than Q1."),
       judge("per-dimension-scores", "PASS if answers are scored on separate rubric dimensions (for example structure, specifics, ownership), not only one overall number. FAIL otherwise."),
-      judge("rewrite-uses-real-story", "Here is the candidate's story bank:\n" + STORY_TEXT + "\nPASS if the rewrite of the sales answer is built from a real story in this story bank (the pricing-rules disagreement with sales fits) and every number, name and event in it appears in the story bank, the resume facts or the transcript, with missing specifics marked [ADD: ...]. FAIL if it contains a number, name or event found in none of those.", 2),
+      judge("rewrite-uses-real-story", "Here is the candidate's story bank:\n" + STORY_TEXT + "\nPASS if the rewrite of the sales answer is built from a real story in this story bank (the pricing-rules disagreement with sales fits) and every number, name and event in it appears in the story bank, the resume facts or the transcript, with missing specifics marked [ADD: ...]. A detail inferred from the story and marked [confirm: ...] is allowed. FAIL if it contains an unmarked number, name or event found in none of those.", 2),
       judge("asks-before-saving", "PASS if the reply asks before saving files or adding stories, or does not save anything. FAIL if it says it already saved files or edited the story bank without asking.")],
      fixture=MAYA_RESUME, max_turns=50, timeout=1200, tags=("core", "slow"))
 

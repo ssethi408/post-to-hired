@@ -16,6 +16,7 @@
 #   EVAL_CONCURRENCY parallel eval runs                  (default 3)
 #   EVAL_JUDGE_MODEL model that grades the outputs        (default sonnet; haiku misjudged clear outputs)
 #   PRIVATE_TERMS    path to your private terms list     (default .private-terms)
+#   GATE_HISTORY     where per-case results are recorded (default .gate-history.tsv, gitignored)
 set -uo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
@@ -81,6 +82,7 @@ EVAL_THRESHOLD="${EVAL_THRESHOLD:-0.8}"
 EVAL_MAX_COST="${EVAL_MAX_COST:-15}"
 runs_flag=(); [ -n "${EVAL_RUNS:-}" ] && runs_flag=(--runs "$EVAL_RUNS")
 outdir="$(mktemp -d)"
+HISTORY="${GATE_HISTORY:-.gate-history.tsv}"   # local, gitignored: one line per case per gate run
 for p in "${PLUGINS[@]}"; do
   printf '   running %s evals...\n' "$p"
   claude plugin eval "plugins/$p" \
@@ -104,9 +106,36 @@ PY
 )
   echo "$summary" | sed 's/^/   /'
   if [ "$code" -ne 0 ]; then bad "$p evals (exit $code, log: $outdir/$p.log)"; else ok "$p evals"; fi
+  # Record every case's score so repeat failures can't hide behind a lucky re-run
+  python3 -I - "$outdir/$p.json" "$EVAL_THRESHOLD" "$p" "$(git rev-parse --short HEAD)" >>"$HISTORY" <<'PY' 2>/dev/null
+import json, sys, datetime
+d = json.load(open(sys.argv[1])); t = float(sys.argv[2])
+now = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M")
+for c in d.get("cases", []):
+    s = c.get("aggregates", {}).get("score")
+    if s is None: continue
+    print(f"{now}\t{sys.argv[4]}\t{sys.argv[3]}\t{c.get('name')}\t{s:.2f}\t{'pass' if s >= t else 'FAIL'}")
+PY
 done
 
 if [ "$fail" -ne 0 ]; then
-  printf '\nPush blocked: fix the failures above. Eval details are in %s\n' "$outdir"; exit 1
+  # Flag cases that keep failing: these are bugs, not bad luck
+  python3 -I - "$HISTORY" <<'PY'
+import sys, collections
+runs = collections.defaultdict(list)
+for line in open(sys.argv[1]):
+    parts = line.rstrip("\n").split("\t")
+    if len(parts) == 6:
+        runs[(parts[2], parts[3])].append(parts[5])
+for (plugin, case), results in sorted(runs.items()):
+    last = results[-5:]
+    if last and last[-1] == "FAIL" and last.count("FAIL") >= 2:
+        print(f"   REPEAT FAILURE: {plugin}/{case} failed {last.count('FAIL')} of its last {len(last)} gate runs.")
+        print("     This is a bug in the skill or the grader, not bad luck. Read the failing runs, fix the cause,")
+        print("     add a grader that would catch it, and log it in docs/gate-log.md. Re-running will not fix it.")
+PY
+  printf '\nPush blocked: fix the failures above. Eval details are in %s\n' "$outdir"
+  printf 'Before retrying: record the cause and the fix in docs/gate-log.md (see CLAUDE.md, "When the gate fails").\n'
+  exit 1
 fi
 printf '\nAll checks passed. Safe to push.\n'

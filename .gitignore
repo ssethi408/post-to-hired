@@ -15,3 +15,6 @@ posts/
 
 # Eval run output
 **/evals/results/
+
+# Local record of every gate run, used to spot repeat failures
+.gate-history.tsv

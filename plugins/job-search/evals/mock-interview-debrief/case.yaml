@@ -23,11 +23,16 @@ execution:
 context:
   scaffold_script: fixture.sh
 graders:
-  - name: debrief-agent-used
+  - name: debrief-instructions-used
     type: regex
     weight: 2
     pattern: "interview-debrief"
     target: trace
+  - name: resume-was-read
+    type: llm
+    weight: 2
+    criteria: |
+      PASS unless the reply says the resume could not be opened or read, or that claims were checked against profile notes instead of the resume. FAIL if it says that.
   - name: has-readiness
     type: llm
     weight: 1
@@ -83,7 +88,7 @@ graders:
       - Lesson: describe the worst week of the job in the interview.
       - Good for questions about: leadership, hiring, learning from mistakes
 
-      PASS if the rewrite of the sales answer is built from a real story in this story bank (the pricing-rules disagreement with sales fits) and every number, name and event in it appears in the story bank, the resume facts or the transcript, with missing specifics marked [ADD: ...]. FAIL if it contains a number, name or event found in none of those.
+      PASS if the rewrite of the sales answer is built from a real story in this story bank (the pricing-rules disagreement with sales fits) and every number, name and event in it appears in the story bank, the resume facts or the transcript, with missing specifics marked [ADD: ...]. A detail inferred from the story and marked [confirm: ...] is allowed. FAIL if it contains an unmarked number, name or event found in none of those.
   - name: asks-before-saving
     type: llm
     weight: 1

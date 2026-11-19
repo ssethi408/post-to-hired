@@ -13,6 +13,16 @@ The git pre-push hook in `.githooks/` runs it automatically. The SessionStart ho
 `git config core.hooksPath .githooks`. Never bypass it with `--no-verify`. If it fails,
 fix the cause and run it again; report the failure to the user rather than pushing.
 
+## When the gate fails
+1. Read the failing runs, not just the scores (the eval JSON paths are printed). Decide the kind:
+   **Skill** (the skill did the wrong thing), **Grader** (the check was wrong) or **Setup** (the gate or
+   test environment was wrong).
+2. Fix the cause. A skill bug gets fixed in the skill; a grader bug in `scripts/gen-evals.py`.
+3. Add a guard: a grader that would have caught it, or a gate check for setup problems.
+4. Add an entry to `docs/gate-log.md` (newest first): what failed, the cause, the fix, the guard.
+5. Never just re-run hoping for a pass. If the gate prints **REPEAT FAILURE**, the case has failed 2 or
+   more of its last 5 runs (from the local `.gate-history.tsv`); treat it as a bug even if one re-run passes.
+
 ## When you change a skill
 - Add or update the eval case for the behavior you changed in `scripts/gen-evals.py`, then run
   `python3 -I scripts/gen-evals.py` to regenerate `plugins/*/evals/`. Don't hand-edit the generated case files.

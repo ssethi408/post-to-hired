@@ -33,6 +33,12 @@ graders:
     weight: 2
     pattern: "interview-researcher"
     target: trace
+  - name: researcher-agent-not-backgrounded
+    type: regex
+    weight: 2
+    match: not_contains
+    pattern: "Async agent launched"
+    target: trace
   - name: resume-was-used
     type: llm
     weight: 1

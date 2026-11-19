@@ -13,7 +13,7 @@ Three phases: **Prep** (an agent builds the brief), **Interview** (you run it li
 
 New styles are always saved to `profile/interviewer-styles/`, never to this skill's folder, which a plugin update replaces.
 
-**The two agents** ship in the job-search plugin as `interview-researcher` and `interview-debrief`. In a plugin install their names may carry the plugin prefix (`job-search:interview-researcher`); use whichever name your agent list shows. If agents are not available, do the agent's work yourself by following its instructions in `../../agents/<name>.md` relative to this skill's folder, then continue.
+**Agents:** Phase 1 uses the `interview-researcher` agent. Phase 3 follows the `interview-debrief` instructions directly rather than launching an agent. **Always launch them in the foreground and wait for the result** (with the Agent tool, set `run_in_background: false`). The next phase needs their output, and a background agent's result never reaches you in time, so you would end up writing the brief or debrief yourself and skip the agent's checks. In a plugin install their names may carry the plugin prefix (`job-search:interview-researcher`); use whichever name your agent list shows. If agents are not available, do the agent's work yourself by following its instructions in `../../agents/<name>.md` relative to this skill's folder, then continue.
 
 ## Customize this
 
@@ -32,9 +32,13 @@ Ask in one message, skipping anything already known from the conversation or the
 4. **Length:** short (5 questions, about 15 minutes), standard (8, about 30), or full (12, about 45). Default to standard.
 5. **Date of the real interview**, for the tracker.
 
+## Before any agent runs (always, including a debrief of a pasted transcript)
+
+The agents can read text files but not `.docx` or `.pdf`. Before launching either agent, extract the resume's text (pandoc, python-docx, or the PDF's text layer), save it to a temporary `.txt` or `.md` file outside the user's profile and applications folders, and pass that path. If you can't extract it, ask the user to paste the resume text. This step runs even when you skip Phases 1 and 2.
+
 ## Phase 1: Prep
 
-The agents can read text files but not `.docx` or `.pdf`. Before launching either agent, extract the resume's text (pandoc, python-docx, or the PDF's text layer), save it to a temporary `.txt` or `.md` file outside the user's profile and applications folders, and pass that path. If you can't extract it, ask the user to paste the resume text.
+Use the resume text file from "Before any agent runs" above.
 
 Launch the `interview-researcher` agent with: the job description, the tailored resume (or master resume from `profile/settings.md`), the paths to `profile/about-me.md` and `profile/targets.md` if they exist, the stage, the interviewer details, and the question count.
 
@@ -66,28 +70,13 @@ Keep a clean transcript as you go: each question, each follow-up, and the user's
 
 ## Phase 3: Debrief
 
-Launch the `interview-debrief` agent with: the transcript, the brief, the style file name, the resume used, and the paths to `profile/voice.md`, `profile/about-me.md` and `profile/interview-rubric.md` if they exist.
+Do the debrief yourself, in this conversation; don't hand it to an agent. Read `../../agents/interview-debrief.md` (relative to this skill's folder) and follow it exactly: its rubric, its fact checks on every rewrite, and its output format. Inputs: the transcript, the brief if there was one, the style used, the resume text from "Before any agent runs", and `profile/voice.md`, `profile/about-me.md` and `profile/interview-rubric.md` if they exist.
 
-Show the user the debrief using exactly this structure. Keep every section, even if short; don't condense the agent's scorecard into one score per answer. If the user gave a transcript directly (for example "debrief me" with a pasted transcript), skip Phases 1 and 2 and still use this structure.
+If the user gave a transcript directly (for example "debrief me" with a pasted transcript), skip Phases 1 and 2 but still do "Before any agent runs" for the resume text.
 
-```
-## Readiness: <1-10>/10
-<one sentence on the single change that would raise it most>
+Show the debrief in that file's output format: readiness, a scorecard with one row per rubric dimension and one column per answer (never just totals), what the follow-ups exposed, rewrites, resume consistency, stories to save, next drill. Then ask whether to save the suggested stories.
 
-## Scorecard
-| Answer | <dimension 1> | <dimension 2> | ... | Total | Note |
-|---|---|---|---|---|---|
-(one row per answer; one column per rubric dimension, each 1 to 5)
-
-## Rewrites
-<the 2 to 3 weakest answers, rewritten>
-
-## Resume consistency
-## Stories to save   (ask before writing any)
-## Next drill
-```
-
-**Rewrites:** in the user's voice, using only facts from the transcript, the resume, or `profile/about-me.md`. For each weak answer, first look in `profile/about-me.md` for a story that fits the question (a disagreement story for a conflict question, a failure story for a failure question) and build the rewrite from it. Gaps get `[ADD: specific number or example]`, never an invented fact.
+**Rewrites:** in the user's voice, using only facts from the transcript, the resume, or `profile/about-me.md`. A detail you infer rather than read (for example an order of events implied by a lesson line) gets `[confirm: ...]` so the user checks it before using it. For each weak answer, first look in `profile/about-me.md` for a story that fits the question (a disagreement story for a conflict question, a failure story for a failure question) and build the rewrite from it. Gaps get `[ADD: specific number or example]`, never an invented fact.
 
 ## Phase 4: Save
 
