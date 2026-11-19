@@ -196,6 +196,7 @@ Rewrite the full post with these rules:
 6. Break the uniform paragraph rhythm — some short, some long
 7. Add voice texture: incomplete sentences where appropriate, direct address, occasional bluntness
 8. If the post lacks a concrete example, flag it but don't invent one — leave a `[ADD SPECIFIC EXAMPLE FROM YOUR EXPERIENCE]` placeholder
+9. Placeholders are brackets only. Never write a sample fact into the post to show the shape ("it told me a company had raised a Series B"), even if you label it a placeholder, and never add a new claim you mark as a guess ("tweaking the prompt didn't hold"). If something is missing, the bracket says what to add and nothing else.
 
 Present the rewrite as the final output after the review report.
 

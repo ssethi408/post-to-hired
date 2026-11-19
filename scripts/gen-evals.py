@@ -245,7 +245,8 @@ What has an AI tool gotten wrong for you?""",
      R,
      [judge("flags-strawman-line", "PASS if the review flags the line 'What fixed it was testing, not better prompts' as a problem (for example a strawman contrast or reframe punchline). FAIL otherwise.", 2),
       judge("rewrite-states-fix-plainly", "Find the rewritten post. PASS if it states the fix without negating an alternative the post never set up (it must not keep a 'X, not Y' line about prompts). FAIL otherwise.", 2),
-      judge("keeps-the-facts", "PASS if the rewritten post keeps the facts: an AI job-search tool, made-up company facts in testing, and 14 test cases before shipping. FAIL if any are dropped or changed.")],
+      judge("keeps-the-facts", "PASS if the rewritten post keeps the facts: an AI job-search tool, made-up company facts in testing, and 14 test cases before shipping. FAIL if any are dropped or changed."),
+      judge("no-new-claims", "Find the rewritten post. Judge only factual statements; reworded sentences, a reworded closing question and bracketed placeholders are all fine. PASS if no factual statement is new. FAIL if it adds a sample or example fact (for example a specific made-up company fact) or a new claim such as what the author tried before, even if a note calls it a placeholder or a guess.", 2)],
      max_turns=15, timeout=600)
 
 case("linkedin-content", "should-not-fire",

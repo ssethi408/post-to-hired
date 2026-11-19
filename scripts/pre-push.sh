@@ -79,6 +79,9 @@ if [ "$(uname -s)" = "Linux" ] && ! { command -v bwrap >/dev/null && command -v 
   exit 1
 fi
 EVAL_THRESHOLD="${EVAL_THRESHOLD:-0.8}"
+# A mean of 3 runs can land a hair under the threshold from floating-point rounding (0.4+1+1)/3 = 0.7999999999999999.
+# Compare against a value a billionth lower so a score exactly at the threshold passes.
+EVAL_THRESHOLD_CMP=$(python3 -I -c "import sys; print(float(sys.argv[1]) - 1e-9)" "$EVAL_THRESHOLD")
 EVAL_MAX_COST="${EVAL_MAX_COST:-15}"
 runs_flag=(); [ -n "${EVAL_RUNS:-}" ] && runs_flag=(--runs "$EVAL_RUNS")
 outdir="$(mktemp -d)"
@@ -87,7 +90,7 @@ for p in "${PLUGINS[@]}"; do
   printf '   running %s evals...\n' "$p"
   claude plugin eval "plugins/$p" \
     --trust-plugin --scaffold --ablation none --no-publish \
-    --threshold "$EVAL_THRESHOLD" --max-cost-usd "$EVAL_MAX_COST" "${runs_flag[@]}" \
+    --threshold "$EVAL_THRESHOLD_CMP" --max-cost-usd "$EVAL_MAX_COST" "${runs_flag[@]}" \
     --judge-model "${EVAL_JUDGE_MODEL:-sonnet}" \
     --concurrency "${EVAL_CONCURRENCY:-3}" \
     --allow-tools Write Edit WebFetch WebSearch Agent Bash \
@@ -101,7 +104,7 @@ print(f"{a.get('casesPassed','?')}/{a.get('casesTotal','?')} cases passed, score
       + (f", PARTIAL: {d.get('partialReason')}" if d.get("partial") else ""))
 for c in d.get("cases", []):
     s = c.get("aggregates", {}).get("score")
-    print(f"      {'ok  ' if s is not None and s >= float(sys.argv[2] if len(sys.argv) > 2 else 0.8) else 'FAIL'} {c.get('name')}: {s}")
+    print(f"      {'ok  ' if s is not None and s >= float(sys.argv[2] if len(sys.argv) > 2 else 0.8) - 1e-9 else 'FAIL'} {c.get('name')}: {s}")
 PY
 )
   echo "$summary" | sed 's/^/   /'
@@ -114,7 +117,7 @@ now = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M")
 for c in d.get("cases", []):
     s = c.get("aggregates", {}).get("score")
     if s is None: continue
-    print(f"{now}\t{sys.argv[4]}\t{sys.argv[3]}\t{c.get('name')}\t{s:.2f}\t{'pass' if s >= t else 'FAIL'}")
+    print(f"{now}\t{sys.argv[4]}\t{sys.argv[3]}\t{c.get('name')}\t{s:.2f}\t{'pass' if s >= t - 1e-9 else 'FAIL'}")
 PY
 done
 

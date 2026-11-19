@@ -10,6 +10,13 @@ Causes fall into three kinds:
 
 ---
 
+## 2026-11-19 · `humanizer-strawman-contrast` (0.7999999999999999) blocked the next push
+- **Kind:** Setup (the gate) and Skill.
+- **Setup cause:** The case averaged (0.4 + 1 + 1) / 3, exactly 0.8, but floating-point rounding made it 0.7999999999999999, below the 0.8 threshold. A case right at the threshold failed.
+- **Skill cause:** In 1 of 3 runs the humanizer wrote a sample fact into the rewrite ("told me a company had raised a Series B") and added a guessed claim ("Tweaking the prompt didn't hold"), flagged only in a note. That breaks its own first rule: never add ideas that weren't in the original.
+- **Fixes:** The gate compares scores against the threshold minus one billionth, for the pass/fail call, the summary and the history. The humanizer has a new rule 9: placeholders are brackets only, with no sample facts and no labeled guesses.
+- **Guard:** New grader `no-new-claims` on the humanizer case. It judges only factual statements, so rewording doesn't count.
+
 ## 2026-11-19 · `mock-interview-debrief` (0.79) blocked the humanizer push
 - **Kind:** Skill (four causes), found by reading traces instead of re-running. This case had failed 3 of its last 5 gate runs.
 - **What happened:** Some runs said the resume couldn't be read. Some showed one total per answer instead of per-dimension scores, or dropped the readiness score. One rewrite added unmarked details ("on my own", "I suggested the pilot").

@@ -31,3 +31,8 @@ graders:
     weight: 1
     criteria: |
       PASS if the rewritten post keeps the facts: an AI job-search tool, made-up company facts in testing, and 14 test cases before shipping. FAIL if any are dropped or changed.
+  - name: no-new-claims
+    type: llm
+    weight: 2
+    criteria: |
+      Find the rewritten post. Judge only factual statements; reworded sentences, a reworded closing question and bracketed placeholders are all fine. PASS if no factual statement is new. FAIL if it adds a sample or example fact (for example a specific made-up company fact) or a new claim such as what the author tried before, even if a note calls it a placeholder or a guess.
