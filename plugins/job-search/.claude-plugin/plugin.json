@@ -1,1 +1,9 @@
-{ "name": "job-search", "version": "0.1.0", "description": "Tailor your resume to each job and run your job search pipeline." }
+{
+  "name": "job-search",
+  "version": "0.2.0",
+  "description": "Tailor your resume to each job and run your job search pipeline.",
+  "author": {
+    "name": "Sudhanshu Sethi",
+    "url": "https://github.com/ssethi408"
+  }
+}

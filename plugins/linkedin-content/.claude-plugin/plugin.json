@@ -1,1 +1,9 @@
-{ "name": "linkedin-content", "version": "0.1.0", "description": "Plan, write, humanize and gate LinkedIn posts in your own voice." }
+{
+  "name": "linkedin-content",
+  "version": "0.2.0",
+  "description": "Plan, write, humanize and gate LinkedIn posts in your own voice.",
+  "author": {
+    "name": "Sudhanshu Sethi",
+    "url": "https://github.com/ssethi408"
+  }
+}

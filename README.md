@@ -2,7 +2,9 @@
 
 Claude skills for a job search that runs on LinkedIn: write posts the right people reply to, tailor your resume to every role, and practice the interview before it happens.
 
-Every skill holds the method. Your name, voice, stories and targets live in a `profile/` folder that only you have. Fork it, fill in your profile, and the skills write like you and work toward the jobs you want.
+Every skill holds the method. Your name, voice, stories and targets live in a `profile/` folder on your own computer that only you have. Install the plugins, let the setup skill build your profile, and the skills write like you and work toward the jobs you want.
+
+You don't need to clone or fork this repo to use it. Fork it only if you want to change the skills themselves (see [Changing the skills](#changing-the-skills)).
 
 ## What's inside
 
@@ -10,7 +12,7 @@ Every skill holds the method. Your name, voice, stories and targets live in a `p
 
 | Skill | What it does |
 |---|---|
-| `setup` | Interviews you once and writes your profile: targets, settings, story bank, voice, LinkedIn author profile. Ends with a privacy check |
+| `setup` | Interviews you once and writes your profile: targets, settings, story bank, voice, LinkedIn author profile. Can load a fictional example profile so you can try everything first. Ends with a privacy check |
 
 **`linkedin-content` plugin**
 
@@ -32,9 +34,9 @@ Every skill holds the method. Your name, voice, stories and targets live in a `p
 | `interview-researcher` (agent) | Builds the prep brief: what the role needs, gaps you'll be probed on, likely questions, your best story for each |
 | `interview-debrief` (agent) | Scores the transcript, checks it against your resume, and rewrites your weakest answers without inventing facts |
 
-Interviewer styles included: recruiter screen, hiring manager, skeptical bar-raiser, panel. Add your own in `plugins/job-search/skills/mock-interview/interviewer-styles/`.
+Interviewer styles included: recruiter screen, hiring manager, skeptical bar-raiser, panel. Add your own in `profile/interviewer-styles/`.
 
-## Quickstart (10 minutes)
+## Quickstart
 
 **1. Install** (in Claude Code):
 
@@ -45,13 +47,13 @@ Interviewer styles included: recruiter screen, hiring manager, skeptical bar-rai
 /plugin install job-search@post-to-hired
 ```
 
-Only want one half? Install `setup` plus just that plugin.
+Only want one half? Install `setup` plus just that plugin. If the skills don't show up right away, restart Claude Code.
 
-**2. Make your profile.** Create a working folder for your job search, start Claude from it, and say *"set me up"*. The `setup` skill interviews you in short rounds, pulls what it can from your resume and a few things you've written, and writes your `profile/` folder. Quick mode takes about 10 minutes, full mode about 30.
+**2. Make your profile.** Create a working folder for your job search (for example `~/job-search`), start Claude from it, and say *"set me up"*. The `setup` skill interviews you in short rounds, pulls what it can from your resume and a few things you've written, and writes your `profile/` folder there. Quick mode takes about 10 minutes, full mode about 30. You can stop after any round and pick it up later.
 
-Want to see a finished profile first? `examples/maya-okafor/` is a complete one for a fictional product manager. Copy its `profile/` folder into your working folder to try the skills before writing your own.
+Want to try the skills before writing anything about yourself? Say *"set me up with the example profile"*. Setup loads a complete profile for Maya Okafor, a fictional product manager, and marks it as the example. Run setup again when you're ready, and it replaces Maya with you.
 
-Prefer to fill it in by hand? Copy `profile-template/` into your working folder as `profile/`.
+Prefer to fill it in by hand? The blank templates are in [`plugins/setup/skills/setup/templates/`](plugins/setup/skills/setup/templates/) and Maya's finished profile is in [`plugins/setup/skills/setup/example/maya-okafor/`](plugins/setup/skills/setup/example/maya-okafor/). Copy the templates into `profile/` and fill them in.
 
 ```
 job-search/
@@ -61,8 +63,13 @@ job-search/
     ├── about-me.md         your story bank
     ├── targets.md          what you're looking for
     ├── settings.md         where your resume lives, where PDFs go, where the tracker lives
-    └── interview-rubric.md optional
+    ├── interview-rubric.md optional
+    ├── humanizer-patterns.md     created by the humanizer as it learns
+    ├── calibration-posts.md      created by the playbook as you post
+    └── interviewer-styles/       styles you add
 ```
+
+Everything the skills learn about you is saved in `profile/`, never inside the plugins, so plugin updates never wipe it.
 
 You don't have to fill everything in on day one. Each skill asks for what it's missing and offers to save your answer.
 
@@ -78,15 +85,20 @@ You don't have to fill everything in on day one. Each skill asks for what it's m
 
 - **Voice:** `profile/voice.md` is where your writing style lives. Paste real samples. The more specific the file ("I never open with a question"), the better the output.
 - **Rules:** each skill says which parts are meant to be changed. Funnel stages, gate rules, humanizer patterns and interview rubrics are all plain markdown.
-- **Interviewer styles:** copy a file in `interviewer-styles/`, rename it, and describe the interviewer you're expecting.
-- **The humanizer learns.** After every review it adds new AI patterns it caught to its own file. In your fork, those changes are yours.
+- **Interviewer styles:** describe the interviewer you're expecting and mock-interview offers to save it to `profile/interviewer-styles/`. Or copy one of the [shipped styles](plugins/job-search/skills/mock-interview/interviewer-styles/) there and edit it.
+- **The humanizer learns.** After every review it saves new AI patterns it caught to `profile/humanizer-patterns.md` and checks them in every review after that.
+
+### Changing the skills
+
+To change a skill's method rather than your own settings, fork this repo, edit the skill, and install from your fork with `/plugin marketplace add <your-username>/post-to-hired`. Your `profile/` folder works the same with your fork.
 
 ## Privacy
 
 Your profile holds your resume, your stories and your targets. It never belongs in a public repo.
 
-- `.gitignore` blocks `profile/`, `tracker/`, `*.docx`, `*.pdf` and any call-notes file.
-- If you fork this repo, check `git status` before every push.
+- It stays in your working folder on your own computer. Claude reads it during a session like any other file you work with, but no skill commits, publishes or sends it anywhere else.
+- If your working folder is a git repository, setup checks that `profile/` and `tracker/` are in its `.gitignore`.
+- This repo's own `.gitignore` blocks `profile/`, `tracker/`, `*.docx`, `*.pdf` and any call-notes file. If you fork it, check `git status` before every push.
 - The proof bank in `author.md` marks every fact as shareable or not. Anything internal to an employer stays not shareable until you decide otherwise.
 
 ## A note on LinkedIn

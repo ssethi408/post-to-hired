@@ -7,9 +7,17 @@ description: "Run a realistic mock interview with the user for a specific upcomi
 
 Three phases: **Prep** (an agent builds the brief), **Interview** (you run it live, one question at a time), **Debrief** (an agent scores the transcript). The interview runs here in the main conversation because subagents cannot talk to the user turn by turn.
 
+**Interviewer styles** come from two places. Read both and treat them the same:
+- `interviewer-styles/` in this skill's own folder: the four that ship with post-to-hired.
+- `profile/interviewer-styles/` in the user's working folder: styles the user added. If both have a file with the same name, the user's wins.
+
+New styles are always saved to `profile/interviewer-styles/`, never to this skill's folder, which a plugin update replaces.
+
+**The two agents** ship in the job-search plugin as `interview-researcher` and `interview-debrief`. In a plugin install their names may carry the plugin prefix (`job-search:interview-researcher`); use whichever name your agent list shows. If agents are not available, do the agent's work yourself by following its instructions in `../../agents/<name>.md` relative to this skill's folder, then continue.
+
 ## Customize this
 
-Safe to change: the interviewer styles in `interviewer-styles/` (add your own), question counts, the rubric in `profile/interview-rubric.md`.
+Safe to change: interviewer styles (add your own in `profile/interviewer-styles/`), question counts, the rubric in `profile/interview-rubric.md`.
 Keep: one question per turn, no feedback during the interview, no invented facts about the user in rewrites.
 
 ## Phase 0: Setup
@@ -17,7 +25,7 @@ Keep: one question per turn, no feedback during the interview, no invented facts
 Ask in one message, skipping anything already known from the conversation or the tracker:
 
 1. **Company and role.** If the tracker or `APPLICATIONS_ROOT` (from `profile/settings.md`) has a folder for this role, use its job description and tailored resume. Otherwise ask for the job posting (URL or pasted text).
-2. **Stage:** recruiter screen, hiring manager, technical / craft, panel, or final / executive. Map it to a file in `interviewer-styles/`. If the user names a style that has no file, improvise it from their description and offer to save it as a new style file afterwards.
+2. **Stage:** recruiter screen, hiring manager, technical / craft, panel, or final / executive. Map it to a style file (see above). Technical and final rounds have no shipped file: start from the closest one (hiring manager for technical, skeptical bar-raiser for final) and adapt. If the user describes a style that has no file, improvise it from their description and offer afterwards to save it as `profile/interviewer-styles/<name>.md`, in the same format as the shipped files.
 3. **Interviewer**, if known: name, title, and anything public about them (the user can paste a LinkedIn summary). Use only what they give you or what is public.
 4. **Length:** short (5 questions, about 15 minutes), standard (8, about 30), or full (12, about 45). Default to standard.
 5. **Date of the real interview**, for the tracker.
@@ -52,13 +60,13 @@ Keep a clean transcript as you go: each question, each follow-up, and the user's
 
 ## Phase 3: Debrief
 
-Launch the `interview-debrief` agent with: the transcript, the brief, the style file name, the resume used, `profile/voice.md`, and `profile/interview-rubric.md` if it exists.
+Launch the `interview-debrief` agent with: the transcript, the brief, the style file name, the resume used, and the paths to `profile/voice.md`, `profile/about-me.md` and `profile/interview-rubric.md` if they exist.
 
 Show the user, in this order:
 
 1. **Readiness:** a 1 to 10 score and one sentence on what would move it up.
 2. **Per-answer scorecard** (table).
-3. **The 2 to 3 weakest answers rewritten** in the user's voice, using only facts from the transcript, the resume, or `about-me.md`. Gaps get `[ADD: specific number or example]`, never an invented fact.
+3. **The 2 to 3 weakest answers rewritten** in the user's voice, using only facts from the transcript, the resume, or `profile/about-me.md`. Gaps get `[ADD: specific number or example]`, never an invented fact.
 4. **Resume consistency:** anything said that contradicts or goes beyond the resume.
 5. **Stories to save:** new stories from the answers worth adding to `profile/about-me.md`. Ask before writing them.
 6. **Next practice round:** the one question type to drill next.

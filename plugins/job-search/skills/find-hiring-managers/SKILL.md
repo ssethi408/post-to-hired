@@ -57,7 +57,7 @@ For each lead marked Pursue, or any lead the user picks:
 
 ## Mode 4: Hand off to the tracker
 
-After qualifying or drafting, ask: "Add these to the tracker?" On yes, call `pipeline-tracker` with each lead's fields: company, role, poster name and title, post link, date found, fit score, verdict, outreach status (Drafted / Sent), and next step.
+After qualifying or drafting, ask: "Add these to the tracker?" On yes, load the `pipeline-tracker` skill (it may be listed as `job-search:pipeline-tracker`) and pass each lead's fields: company, role, poster name and title, post link, date found, fit score, verdict, outreach status (Drafted / Sent), and next step.
 
 ## Never
 

@@ -1,7 +1,5 @@
 # Your personal data. Never commit it.
 profile/
-# ...except the fictional example profiles shipped with the repo
-!examples/*/profile/
 tracker/
 *.docx
 *.pdf

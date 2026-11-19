@@ -7,13 +7,14 @@ description: "Tailor the user's master resume to a job description, review it wi
 
 ## Settings
 
-Read these from `profile/settings.md` (see `profile-template/settings.md`). If the file or a value is missing, ask the user once and offer to save the answer there.
+Read these from `profile/settings.md` in the user's working folder (the `setup` skill writes it). If the file or a value is missing, ask the user once and offer to save the answer there.
 
 - RESUME_SOURCE: path to the user's master resume (.docx)
 - APPLICATIONS_ROOT: folder where tailored resumes are saved
 - OUTPUT_FILE_NAME: file name for every tailored PDF (the folder path is what distinguishes each application)
+- RESUME_LENGTH_PAGES: target page count (default 2)
 
-These live on the user's computer. If that folder is not connected to the conversation, request access to it before starting.
+These live on the user's computer. If you can't read that folder from where you're running, ask the user for access or to share the file before starting.
 
 ## Step 1: Gather inputs
 1. Get the job description. If the user gives a URL, fetch the page; if they paste text, use it. Extract: company name, exact role title, level, location, compensation if listed, and the 8 to 12 most important requirements and keywords.
@@ -31,7 +32,7 @@ Edit only what improves fit. Keep every fact true.
 - Reorder bullets within each job so the most relevant come first.
 - Reword bullets to use the posting's language where it honestly describes the same work.
 - Surface relevant metrics (team size, scope, portfolio breadth) that are already in the resume.
-- Trim, merge, or drop low-relevance bullets to keep the length the user prefers (default 2 pages).
+- Trim, merge, or drop low-relevance bullets to keep the resume at RESUME_LENGTH_PAGES.
 - Adjust the core competencies to lead with what the role asks for.
 - Never add titles, employers, dates, degrees, numbers, or tools that are not in the source resume, unless the user supplies them in the conversation. Never use em-dashes (replace existing ones with commas or "to").
 
@@ -50,8 +51,9 @@ Apply their edits and show what changed. Once the text is close, build the PDF (
    - Remove characters not allowed in folder names (/ \ : * ? " < > |).
    - If OUTPUT_FILE_NAME already exists there, ask before overwriting.
 2. Build the PDF from a copy of RESUME_SOURCE so the original formatting is preserved:
-   - Run the docx skill's merge_runs.py on the copy, then edit paragraphs in place with python-docx (set run text, deepcopy an existing bullet paragraph for new bullets, remove paragraphs for cuts). Do not rebuild the document from scratch.
-   - Convert to PDF with LibreOffice.
+   - If a docx skill is available, use its run-merging helper on the copy first (Word often splits one sentence across many runs, which makes in-place edits miss). Without one, merge adjacent runs in each paragraph that share the same formatting yourself with python-docx.
+   - Edit paragraphs in place with python-docx: set run text, deepcopy an existing bullet paragraph for new bullets, remove paragraphs for cuts. Do not rebuild the document from scratch.
+   - Convert to PDF with LibreOffice (`soffice --headless --convert-to pdf`). If python-docx or LibreOffice is missing, say which one and how to install it, and ask before installing anything.
 3. Render the PDF pages to images and look at them: correct page count, no broken layout, no leftover old text, no em-dashes.
 4. After approval, write the PDF to APPLICATIONS_ROOT/{Company}/{Role} - {YYYY-MM}/OUTPUT_FILE_NAME on their computer and tell the user the path in one line.
 5. If they added new true facts during review, remind them in one line that RESUME_SOURCE doesn't have them yet and offer to update the master.

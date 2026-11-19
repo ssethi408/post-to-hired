@@ -1,1 +1,9 @@
-{ "name": "setup", "version": "0.1.0", "description": "Interviews you once and builds the profile every other skill reads." }
+{
+  "name": "setup",
+  "version": "0.2.0",
+  "description": "Interviews you once and builds the profile every other skill reads.",
+  "author": {
+    "name": "Sudhanshu Sethi",
+    "url": "https://github.com/ssethi408"
+  }
+}

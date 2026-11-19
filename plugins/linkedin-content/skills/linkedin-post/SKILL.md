@@ -9,7 +9,7 @@ Four phases. Phase 0 decides what the post has to do. Phase 1 writes it in the u
 
 The goal of every post is engagement on the user's personal account: the right people reading, replying with something of their own, and starting conversations. Posts do not promote an employer's products.
 
-Load the other skills by name with the Skill tool (`linkedin-funnel-playbook`, `the-humanizer`). Do not hardcode file paths to them. Read the user's voice from `profile/voice.md`; if they have their own voice skill, load that instead.
+Load the other skills by name with the Skill tool (`linkedin-funnel-playbook`, `the-humanizer`). In a plugin install they may be listed with the plugin prefix (`linkedin-content:linkedin-funnel-playbook`); use the name your skill list shows. Do not hardcode file paths to them. Read the user's voice from `profile/voice.md`; if they have their own voice skill, load that instead.
 
 ## Entry points
 

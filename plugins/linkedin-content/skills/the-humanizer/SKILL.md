@@ -5,11 +5,13 @@ description: "Review a blog post for AI-generated patterns, score it on four dim
 
 ## Blog Post Humanizer
 
-Created by Aditya Vempaty. See CREDITS.md in the repo root.
+Created by Aditya Vempaty. See CREDITS.md in the post-to-hired repository (github.com/ssethi408/post-to-hired).
 
 You are a blog post reviewer calibrated to detect AI-generated texture and rewrite content in an authentic human voice. When the user pastes a blog post draft, run the full review pipeline below.
 
 Use the complete Content AI Guide below as your reference framework for detection and rewriting.
+
+**Your learned patterns:** if `profile/humanizer-patterns.md` exists in the user's working folder, read it before Step 1 and treat every pattern in it exactly like the ones in this file. That file is where Step 6 saves what this skill learns, so it survives plugin updates.
 
 ---
 
@@ -236,19 +238,21 @@ After completing every review and rewrite, automatically run this step. Do not s
 
 ### Step 6: Skill Self-Update
 
-Compare the flags you raised in this review against the detection lists already in this skill file. For each flag, check:
+Compare the flags you raised in this review against the detection lists in this skill file and in `profile/humanizer-patterns.md`. For each flag, check:
 
-1. **Is this pattern already documented in the skill?** If yes, skip it.
-2. **Is this a new pattern worth catching in future reviews?** If yes, add it to the appropriate section:
-   - New phrase-level patterns > add to "Phrase-level markers" in Step 1
-   - New structural patterns > add to "Structural markers" in Step 1
-   - New originality concerns > add to Step 2
-   - New platform-specific patterns (LinkedIn, email, Slack) > add to the relevant marker list with the platform noted
+1. **Is this pattern already documented in either place?** If yes, skip it.
+2. **Is this a new pattern worth catching in future reviews?** If yes, add it to `profile/humanizer-patterns.md` in the user's working folder, under the matching heading:
+   - `## Phrase-level markers` (same kind as Step 1's phrase-level list)
+   - `## Structural markers` (same kind as Step 1's structural list)
+   - `## Originality concerns` (same kind as Step 2)
+   - New platform-specific patterns (LinkedIn, email, Slack) go under the matching heading with the platform noted
+
+If the file does not exist, create it with those three headings and the first line `# Humanizer patterns learned from my drafts`. Never edit this SKILL.md for learned patterns: in a plugin install it is replaced on every update, and anything written to it is lost.
 
 ### How to add a new pattern:
 
 - Write it as a specific, flaggable rule with an example
-- Place it in the correct section of this file
+- Place it under the correct heading in `profile/humanizer-patterns.md`
 - Do not duplicate existing rules
 - Do not add vague rules. If you can't give a concrete example, don't add it.
 
@@ -256,16 +260,16 @@ Compare the flags you raised in this review against the detection lists already 
 
 ```
 ## Skill Update
-- [X] new patterns added to the Humanizer skill
+- [X] new patterns added to profile/humanizer-patterns.md
 - Added: [list each new pattern in one line]
-- No action needed from you. The skill is updated for next time.
+- No action needed from you. They'll be checked in every review from now on.
 ```
 
 If no new patterns were found, say:
 
 ```
 ## Skill Update
-- No new patterns found. The skill already covers everything flagged in this review.
+- No new patterns found. The skill and your saved patterns already cover everything flagged in this review.
 ```
 
 This step is mandatory. The skill gets sharper every time it runs. That's the point.

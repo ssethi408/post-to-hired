@@ -32,7 +32,7 @@ The method needs context it cannot invent. Ask these once, save the answers, reu
 
 Also record: 2 to 3 topics the author wants to be known for, current follower count, posting cadence today, target cadence (posts per week), how long they will give a change before judging it, and last 3 posts with stage tags.
 
-Profile template is at `profile-template/author.md` in the post-to-hired repo.
+For the user's own profile, if the `setup` skill is installed (it may be listed as `setup:setup`), hand off to it: it runs these questions as its author round and writes `profile/author.md` from its template. For anyone else, or if setup isn't installed, ask the questions above yourself and write the answers to `profile/author.md` (or `profile/authors/<name>.md`) under the same five headings, plus the extra fields in the line above.
 
 No profile yet and the user wants a CHECK or DRAFT now: state the assumed reader and what they get in one line at the top of the output, proceed, and offer SETUP at the end.
 
@@ -141,7 +141,7 @@ For the week: one slot per post in the author's target cadence. For each, give s
 
 ## Calibration
 
-`references/calibration-posts.md` (optional, create it as you go) holds real posts with expected results for the five rules. Re-run them after editing this file. Add a post for each author as results come in.
+`profile/calibration-posts.md` in the user's working folder (optional, create it as you go; never inside this skill's folder, which a plugin update replaces) holds real posts with expected results for the five rules. Re-run them after editing this file. Add a post for each author as results come in.
 
 v2.1 (2026-10-28): engagement-focused version for personal accounts. Calibration set started with one real post.
 v2.2 (2026-11-18): cadence and review window moved into the author profile; stage descriptions rewritten; Rule 3 renamed.
