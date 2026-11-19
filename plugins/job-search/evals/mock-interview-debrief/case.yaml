@@ -37,7 +37,7 @@ graders:
     type: llm
     weight: 1
     criteria: |
-      PASS if the reply scores the first answer clearly higher than the second. FAIL otherwise.
+      Q1 is the onboarding-funnel answer; Q2 is the disagreements-with-sales answer. PASS if the reply rates Q1 as stronger than Q2, in scores or in words. FAIL only if it rates Q2 as equal to or stronger than Q1.
   - name: per-dimension-scores
     type: llm
     weight: 1

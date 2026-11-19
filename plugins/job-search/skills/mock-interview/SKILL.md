@@ -34,6 +34,8 @@ Ask in one message, skipping anything already known from the conversation or the
 
 ## Phase 1: Prep
 
+The agents can read text files but not `.docx` or `.pdf`. Before launching either agent, extract the resume's text (pandoc, python-docx, or the PDF's text layer), save it to a temporary `.txt` or `.md` file outside the user's profile and applications folders, and pass that path. If you can't extract it, ask the user to paste the resume text.
+
 Launch the `interview-researcher` agent with: the job description, the tailored resume (or master resume from `profile/settings.md`), the paths to `profile/about-me.md` and `profile/targets.md` if they exist, the stage, the interviewer details, and the question count.
 
 It returns a brief: what the role really needs, resume gaps an interviewer will probe, likely questions, and the user's best story for each.

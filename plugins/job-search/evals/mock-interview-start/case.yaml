@@ -33,6 +33,11 @@ graders:
     weight: 2
     pattern: "interview-researcher"
     target: trace
+  - name: resume-was-used
+    type: llm
+    weight: 1
+    criteria: |
+      PASS unless the reply says the resume could not be opened or read, or that the brief is based on profile files only. FAIL if it says that.
   - name: short-brief
     type: llm
     weight: 1
@@ -47,7 +52,7 @@ graders:
     type: llm
     weight: 1
     criteria: |
-      PASS if the reply either asks whether the user is ready or asks exactly one interview question. FAIL if it asks two or more interview questions or coaches the user on answers.
+      Prep advice inside the brief (what to emphasize, how to handle a gap) is expected and fine. Judge only what comes after the brief. PASS if the reply then either asks whether the user is ready to start or asks exactly one interview question. FAIL if it asks two or more interview questions.
   - name: no-invented-company-facts
     type: llm
     weight: 2
