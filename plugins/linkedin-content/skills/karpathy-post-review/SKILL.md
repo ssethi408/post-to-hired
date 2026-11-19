@@ -14,7 +14,7 @@ Original spirit, kept intact: **caution over speed. Doing less, correctly, beats
 - The user pastes one or more LinkedIn posts (drafts or already published) and asks to run them through Karpathy, check them, tighten them, or "karpathy this".
 - Several posts at once: review each separately, then add a short cross-post pattern section at the end.
 
-Before reviewing, read `profile/author.md` and `profile/voice.md` from the working folder if they exist. They tell you who the author's readers are, which jargon those readers already know, and how the author writes, so you don't flag terms the target reader uses every day or rewrite away the author's style.
+Before reviewing, open `profile/author.md` and `profile/voice.md` in the working folder you were started in with the Read tool. Don't conclude they're missing without trying to read them; only if the Read fails, say so in one line and infer the reader. They tell you who the author's readers are, which jargon those readers already know, and how the author writes, so you don't flag terms the target reader uses every day or rewrite away the author's style.
 
 This is a review, not a rewrite. If they want a new post written, that is the linkedin-post skill's job. If they want funnel-stage or reach diagnosis, pair with linkedin-funnel-playbook. This skill can run before or after either.
 
@@ -58,7 +58,7 @@ Code version: turn vague tasks into verifiable goals, then loop until they pass.
 Check:
 - What is this post supposed to make happen? Name one verifiable goal: e.g. a specific type of reader replies with their own experience, a hiring manager DMs, a peer debates the claim. "Engagement" or "visibility" is not a goal.
 - Does the hook (first two lines, before "see more") give the target reader a reason to expand?
-- Does the ending give that reader something specific to respond to?
+- Does the ending give that reader something specific to respond to? A generic closing question ("Thoughts?", "Agree?", "What do you think?") always gets its own finding, with a narrower question as the fix.
 - Verify: re-read the post as the target reader. Does every line move them toward the goal? List the lines that don't.
 
 ## Output format
@@ -78,7 +78,7 @@ For each post:
 
 **Questions for the author** (only if something is genuinely ambiguous).
 
-Then, if they ask for it or there are 3+ findings, offer the **edited post** with only the suggested changes applied, so they can see the diff in context. Never return a full rewrite unprompted.
+Then, if they ask for it or there are 3+ findings, offer the **edited post** with only the suggested changes applied, so they can see the diff in context. Every changed line must come from a finding above; don't add new sentences, facts or ideas no finding called for, and use `[placeholders]` for details only the author has. Never return a full rewrite unprompted.
 
 For multiple posts, finish with **Patterns across posts**: 2-4 recurring issues (e.g. "ends with a generic question in 4 of 5", "two ideas per post").
 
