@@ -14,6 +14,7 @@
 #   EVAL_MAX_COST    cost ceiling in USD for all evals    (default 15)
 #   EVAL_RUNS        runs per case                       (default: each case's runs, 3)
 #   EVAL_CONCURRENCY parallel eval runs                  (default 3)
+#   EVAL_JUDGE_MODEL model that grades the outputs        (default sonnet; haiku misjudged clear outputs)
 #   PRIVATE_TERMS    path to your private terms list     (default .private-terms)
 set -uo pipefail
 cd "$(git rev-parse --show-toplevel)"
@@ -85,6 +86,7 @@ for p in "${PLUGINS[@]}"; do
   claude plugin eval "plugins/$p" \
     --trust-plugin --scaffold --ablation none --no-publish \
     --threshold "$EVAL_THRESHOLD" --max-cost-usd "$EVAL_MAX_COST" "${runs_flag[@]}" \
+    --judge-model "${EVAL_JUDGE_MODEL:-sonnet}" \
     --concurrency "${EVAL_CONCURRENCY:-3}" \
     --allow-tools Write Edit WebFetch WebSearch Agent Bash \
     --json "$outdir/$p.json" >"$outdir/$p.log" 2>&1

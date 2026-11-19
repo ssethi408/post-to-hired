@@ -28,7 +28,7 @@ These live on the user's computer. If you can't read that folder from where you'
 
 ## Step 3: Tailor the resume
 Edit only what improves fit. Keep every fact true.
-- Rewrite the headline and summary to match the role's level and focus.
+- Rewrite the headline and summary to match the role's focus. The headline must not claim a title or level the user hasn't held (no "Director-level" for someone whose highest title is Senior PM); describe the work instead ("Product leader, carrier onboarding and payments").
 - Reorder bullets within each job so the most relevant come first.
 - Reword bullets to use the posting's language where it honestly describes the same work.
 - Surface relevant metrics (team size, scope, portfolio breadth) that are already in the resume.
@@ -39,7 +39,7 @@ Edit only what improves fit. Keep every fact true.
 ## Step 4: Review with the user (required, do not skip)
 Show the user, in chat:
 1. The full tailored resume text.
-2. A short change summary: what moved, what was reworded, what was cut, and a **New wording not in RESUME_SOURCE** list: every phrase or claim that can't be traced word for word or in plain meaning to RESUME_SOURCE or `profile/about-me.md` (for example a new description of the company, a new collaborator, a new skill). Each item stays only if the user says yes. If there are none, say "none".
+2. A short change summary: what moved, what was reworded, what was cut, and a **New wording not in RESUME_SOURCE** list: every phrase or claim that can't be traced word for word or in plain meaning to RESUME_SOURCE or `profile/about-me.md` (for example a new description of the company, a new collaborator, a new skill). Each item stays only if the user says yes. If there are none, say "none". Build this list mechanically before showing anything: go through the tailored resume line by line and check every number, duration, count, name and claim against RESUME_SOURCE's text. Anything you can't find there goes on the list, including details taken from `profile/about-me.md`.
 3. The fit table from Step 2.
 4. For each Gap or weak Partial, ask whether they have real experience not in the resume that would close it, and ask for specifics (counts, scope, named partners) that would make new bullets stronger. Only add what they confirm.
 Apply their edits and show what changed. Once the text is close, build a preview PDF (Step 5.2) in a temporary folder outside APPLICATIONS_ROOT (for example the system temp directory) and send it so they see the real layout. Repeat until the user explicitly approves. Nothing goes into APPLICATIONS_ROOT, and RESUME_SOURCE is never touched, before approval.

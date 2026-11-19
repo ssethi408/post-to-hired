@@ -71,7 +71,7 @@ Launch the `interview-debrief` agent with: the transcript, the brief, the style 
 Show the user, in this order:
 
 1. **Readiness:** a 1 to 10 score and one sentence on what would move it up.
-2. **Per-answer scorecard** (table).
+2. **Per-answer scorecard:** a table with one row per answer and one column per rubric dimension (each scored 1 to 5), then a total. Don't collapse it into a single score per answer.
 3. **The 2 to 3 weakest answers rewritten** in the user's voice, using only facts from the transcript, the resume, or `profile/about-me.md`. Gaps get `[ADD: specific number or example]`, never an invented fact.
 4. **Resume consistency:** anything said that contradicts or goes beyond the resume.
 5. **Stories to save:** new stories from the answers worth adding to `profile/about-me.md`. Ask before writing them.

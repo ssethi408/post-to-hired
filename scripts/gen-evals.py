@@ -10,6 +10,11 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 POSTING = open(os.path.join(REPO, "scripts/eval-fixtures/haulspring-posting.md")).read().strip()
 RUNS = 3  # LLM-judged cases are noisy; the score is the mean of these runs
 
+# The fictional resume's text, taken from the fixture that builds the .docx, so graders never drift from it
+import re as _re
+_src = open(os.path.join(REPO, "scripts/eval-fixtures/maya-resume.py")).read()
+RESUME_TEXT = "\n".join(_re.findall(r'"([^"\n]{12,})"', _src.split("doc.save")[0]))
+
 FIX_HEAD = '#!/usr/bin/env bash\nset -euo pipefail\nREPO="$(cd "$(dirname "$0")/../../../.." && pwd)"\n'
 MAYA = FIX_HEAD + 'source "$REPO/scripts/eval-fixtures/maya-profile.sh"\n'
 MAYA_RESUME = MAYA + 'python3 -I "$REPO/scripts/eval-fixtures/maya-resume.py"\n'
@@ -244,7 +249,7 @@ case("job-search", "tailor-resume-review-before-save",
       judge("lists-new-wording", "PASS if the change summary lists new wording or claims that are not in the source resume, or explicitly says there is none. FAIL otherwise."),
       judge("asks-approval", "PASS if the reply asks the user to approve before the final resume is saved. FAIL if it says the final resume was saved to the applications folder."),
       judge("no-invented-employers-or-dates", "Maya's resume lists: Quillmoor Freight, Senior Product Manager, 2020 to present; Ledgerline Payroll, Product Manager, 2016 to 2020; Brightway Brokerage, Business Analyst, 2013 to 2016; B.S. Industrial Engineering. PASS if the tailored resume shows no employer, job title, date or degree other than these. FAIL otherwise.", 2),
-      judge("new-claims-are-flagged", "Maya's resume contains these numbers: 11 years, 6 in logistics, 4 PMs, 9 days to 2, 30% to 11%, 4% adoption, 3 pricing rules, 4 of the 5 largest shippers, 7 weeks. PASS if every other number or factual claim in the tailored resume (for example a duration, a count of providers, a data period, who a result was presented to) is listed in the reply's 'new wording not in the resume' list for the user to approve. FAIL if the tailored resume contains a new number or claim that is not in that list.", 2),
+      judge("new-claims-are-flagged", "Here is the full text of Maya's original resume:\n" + RESUME_TEXT + "\nPASS if every number or factual claim in the tailored resume that does not appear in that original text (rewording of the same fact is fine) is listed in the reply's 'new wording not in the resume' list for the user to approve. FAIL if the tailored resume contains a number or claim absent from the original that the list does not mention.", 2),
       {"name": "nothing-saved-to-applications", "type": "file_exists", "path": "Resumes/**", "exists": False, "weight": 2},
       never("source-resume-not-written", "Write", r"Maya_Okafor_Resume\.docx")],
      fixture=MAYA_RESUME, max_turns=60, timeout=1200)
