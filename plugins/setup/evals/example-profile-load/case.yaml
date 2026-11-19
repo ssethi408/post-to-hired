@@ -1,0 +1,55 @@
+schema_version: "1.1"
+name: example-profile-load
+description: "Loads the fictional example profile into profile/, marked as the example, with the privacy check"
+tags: [core]
+runs: 1
+execution:
+  prompt: |
+    Set me up with the example profile so I can try the skills first. This folder is my job search working folder.
+  max_turns: 30
+  timeout_seconds: 600
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(git:*), Bash(ls:*), Bash(cp:*), Bash(mkdir:*)]
+context:
+  scaffold_script: fixture.sh
+graders:
+  - name: author-copied-and-marked
+    type: regex
+    weight: 2
+    pattern: "EXAMPLE PROFILE"
+    target: {source: file, path: profile/author.md}
+  - name: voice-copied
+    type: regex
+    pattern: "My voice"
+    target: {source: file, path: profile/voice.md}
+  - name: about-me-copied
+    type: regex
+    pattern: "carrier onboarding"
+    target: {source: file, path: profile/about-me.md}
+  - name: readme-not-copied
+    type: file_exists
+    path: "profile/README.md"
+    exists: false
+  - name: gitignore-protects-profile
+    type: regex
+    weight: 2
+    pattern: "profile/"
+    target: {source: file, path: .gitignore}
+  - name: tells-user-its-fictional
+    type: llm
+    criteria: |
+      PASS if the final reply tells the user the loaded profile is fictional (Maya Okafor) and that resume tailoring or mock interviews need their own real resume set in profile/settings.md. FAIL if either point is missing.
+
+  - name: never-edits-plugin-files
+    type: tool_used
+    arm: both
+    tool: Edit
+    min: 0
+    max: 0
+    input_match: "SKILL\\.md|/plugins/"
+  - name: never-writes-plugin-files
+    type: tool_used
+    arm: both
+    tool: Write
+    min: 0
+    max: 0
+    input_match: "SKILL\\.md|/plugins/"

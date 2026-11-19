@@ -1,0 +1,30 @@
+schema_version: "1.1"
+name: tracker-add-and-followups
+description: "pipeline-tracker creates the CSV with the documented header, adds one row, and reports what is due"
+tags: [core]
+runs: 1
+execution:
+  prompt: |
+    Add this to my tracker: Director of Product at Fernwick Logistics, remote US, found via a LinkedIn post by Priya Raman (VP Product) today, fit score 18, I drafted outreach but haven't sent it.
+    Then tell me what follow-ups are due this week.
+  max_turns: 20
+  timeout_seconds: 600
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(ls:*), Bash(mkdir:*), Bash(cat:*)]
+context:
+  scaffold_script: fixture.sh
+graders:
+  - name: exact-header
+    type: regex
+    weight: 2
+    pattern: "^id,company,role,level,location,source,contact_name,contact_title,link,date_found,fit_score,stage,outreach_status,applied_date,resume_used,interview_dates,last_contact,next_step,next_step_due,notes"
+    target: {source: file, path: tracker/pipeline.csv}
+  - name: row-added
+    type: regex
+    weight: 2
+    pattern: "Fernwick"
+    target: {source: file, path: tracker/pipeline.csv}
+  - name: next-step-and-due
+    type: llm
+    criteria: |
+      PASS if the reply confirms the row and gives a next step with a due date (for example sending the drafted outreach), and lists follow-ups due this week. FAIL otherwise.
+

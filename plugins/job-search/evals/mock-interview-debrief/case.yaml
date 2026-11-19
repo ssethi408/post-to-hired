@@ -1,0 +1,36 @@
+schema_version: "1.1"
+name: mock-interview-debrief
+description: "mock-interview debrief scores answers, rewrites weak ones without inventing facts, and asks before saving"
+tags: [core, slow]
+runs: 1
+execution:
+  prompt: |
+    We just finished a mock interview for the Director of Product role at Haulspring (hiring manager round). Debrief me now. Here's the transcript:
+
+    Q1 (interviewer): Tell me about a time you improved an onboarding funnel.
+    A1 (me): At Quillmoor, carriers took 9 days to get approved and 30% dropped off. I sat with the onboarding desk for a week, found most of the delay was insurance documents, and we automated insurance checks with two providers. Onboarding went to 2 days and drop-off fell to 11% in a quarter.
+
+    Q2 (interviewer): How do you handle disagreements with sales?
+    A2 (me): Um, I think it's really about communication and alignment, you know, we just kind of worked it out together as a team and it was fine.
+
+    Q2 follow-up (interviewer): What did you do, specifically?
+    A2b (me): We had some meetings and figured it out.
+
+    end
+  max_turns: 40
+  timeout_seconds: 1200
+  allowed_tools: [Read, Glob, Grep, Skill, Agent, Write, Edit]
+context:
+  scaffold_script: fixture.sh
+graders:
+  - name: debrief-agent-used
+    type: regex
+    weight: 2
+    pattern: "interview-debrief"
+    target: trace
+  - name: debrief-content
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the reply has a readiness score from 1 to 10, scores both answers with A1 clearly stronger than A2, rewrites A2 using only facts Maya actually has (for example the pricing-rules disagreement with sales from her story bank) and marks missing specifics as [ADD: ...] instead of inventing them, and asks before saving files or adding stories. FAIL otherwise.
+

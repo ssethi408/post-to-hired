@@ -1,0 +1,48 @@
+schema_version: "1.1"
+name: tailor-resume-review-before-save
+description: "tailor-resume analyzes fit, shows tailored text and asks for approval before saving anything"
+tags: [core]
+runs: 1
+execution:
+  prompt: |
+    Here's a job posting. Tailor my resume for it.
+
+    Director of Product, Carrier Experience — Haulspring (fictional company)
+    Remote (US)
+
+    Haulspring is a Series C freight marketplace connecting 40,000 trucking carriers with shippers.
+
+    You will lead 3 product managers and own carrier onboarding, payments and the carrier mobile app.
+
+    Requirements:
+    - 8+ years in product management, 2+ managing product managers
+    - Experience in logistics, freight or marketplaces
+    - Track record of improving activation or onboarding funnels with data
+    - Experience with payments products
+    - Strong partnership with operations and sales
+    - Comfortable making and explaining trade-offs to executives
+    - Mobile product experience a plus
+  max_turns: 60
+  timeout_seconds: 1200
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(python3:*), Bash(pandoc:*), Bash(soffice:*), Bash(ls:*), Bash(mkdir:*), Bash(cp:*), Bash(md5sum:*)]
+context:
+  scaffold_script: fixture.sh
+graders:
+  - name: review-step
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the reply includes a fit table that classifies requirements as Strong, Partial or Gap, shows tailored resume text, summarizes what changed, asks about gaps, and asks the user to approve before saving. FAIL if it says it saved the final resume to the applications folder, or invents employers, titles, dates or numbers not in Maya's resume (9 days to 2, 30% to 11%, 4%, 4 of 5 shippers, 7 weeks, 4 PMs, 11 years).
+
+  - name: nothing-saved-to-applications
+    type: file_exists
+    weight: 2
+    path: "Resumes/**"
+    exists: false
+  - name: source-resume-untouched
+    type: tool_used
+    arm: both
+    tool: Write
+    min: 0
+    max: 0
+    input_match: "Maya_Okafor_Resume\\.docx"

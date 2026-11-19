@@ -1,0 +1,47 @@
+schema_version: "1.1"
+name: post-full-path
+description: "linkedin-post runs brief, draft, humanizer and gate, and saves learned patterns only to profile/"
+tags: [core]
+runs: 1
+execution:
+  prompt: |
+    Help me write a LinkedIn post about the carrier onboarding story.
+  max_turns: 50
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(ls:*), Bash(mkdir:*)]
+context:
+  scaffold_script: fixture.sh
+graders:
+  - name: phase0-brief
+    type: regex
+    weight: 1
+    pattern: "STAGE:"
+  - name: check-table
+    type: regex
+    weight: 1
+    pattern: "RULES: *[0-5]/5"
+  - name: humanizer-loaded
+    type: tool_used
+    tool: Skill
+    min: 1
+    input_match: "the-humanizer"
+  - name: post-quality
+    type: llm
+    weight: 3
+    criteria: |
+      Find the final LinkedIn post in the reply. PASS only if all hold: it is about carrier onboarding going from 9 days to 2 (facts from Maya's profile, nothing invented beyond [verify] markers); it contains no em-dash characters and no emojis; its first paragraph (before the first blank line) is under about 210 characters and opens on a concrete scene, number or event; it does not end with engagement bait like 'Agree?' or 'Thoughts?'. FAIL if any fails.
+
+  - name: never-edits-plugin-files
+    type: tool_used
+    arm: both
+    tool: Edit
+    min: 0
+    max: 0
+    input_match: "SKILL\\.md|/plugins/"
+  - name: never-writes-plugin-files
+    type: tool_used
+    arm: both
+    tool: Write
+    min: 0
+    max: 0
+    input_match: "SKILL\\.md|/plugins/"

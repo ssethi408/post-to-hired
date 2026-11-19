@@ -8,3 +8,9 @@ tracker/
 # Private notes from calls and conversations. Never commit them.
 *call-notes*
 **/references/*-notes.md
+
+# Your own private names and details for the pre-push privacy scan. Never commit it.
+.private-terms
+
+# Eval run output
+**/evals/results/

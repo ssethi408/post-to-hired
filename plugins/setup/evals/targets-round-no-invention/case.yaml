@@ -1,0 +1,43 @@
+schema_version: "1.1"
+name: targets-round-no-invention
+description: "Writes profile/targets.md in the template's shape from the user's answers without inventing anything"
+tags: [core]
+runs: 1
+execution:
+  prompt: |
+    Set me up. Quick mode, job search only (no LinkedIn posts). Use this folder.
+    I don't have my resume handy, so skip pulling from it. Here are my answers for targets so you can write that file now:
+    - Roles: Senior Data Analyst or Analytics Lead. Not interested in data engineering.
+    - Level: senior individual contributor.
+    - Industries: healthcare, health insurance. Companies of 200 to 5,000 people.
+    - Location: remote in the US, or hybrid in Denver.
+    - I'd rather not share a compensation number.
+    - Dealbreaker: more than 2 days a week in an office.
+    Write profile/targets.md now and show it to me. Don't do the other rounds yet.
+  max_turns: 30
+  timeout_seconds: 600
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(git:*), Bash(ls:*), Bash(mkdir:*)]
+context:
+  scaffold_script: fixture.sh
+graders:
+  - name: targets-written
+    type: regex
+    weight: 2
+    pattern: "Senior Data Analyst"
+    target: {source: file, path: profile/targets.md}
+  - name: template-shape
+    type: regex
+    weight: 1
+    pattern: "Dealbreakers"
+    target: {source: file, path: profile/targets.md}
+  - name: no-invented-comp
+    type: llm
+    focus: {source: file, path: profile/targets.md}
+    criteria: |
+      PASS if the compensation line is blank, marked TODO, or says the user declined, and every other value matches only what the user said (roles, level, healthcare industries, remote US or hybrid Denver, the office dealbreaker). FAIL if any number for compensation or any company name, industry or preference the user did not give appears.
+
+  - name: shows-and-asks-for-changes
+    type: llm
+    criteria: |
+      PASS if the reply shows the targets file content (or a faithful summary of it) and asks whether anything should change. FAIL otherwise.
+

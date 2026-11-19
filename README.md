@@ -105,6 +105,19 @@ Your profile holds your resume, your stories and your targets. It never belongs 
 
 These skills help you write, research and track. They don't scrape LinkedIn or automate your account, both of which LinkedIn's user agreement prohibits. You do the searching and the posting.
 
+## Tests
+
+Every plugin has an eval suite in `plugins/<name>/evals/`, run with Claude Code's built-in `claude plugin eval`. The cases cover each skill end to end with the fictional Maya Okafor profile: loading the example profile, writing a post through the full brief, humanize and gate path, tailoring a resume and stopping for approval, qualifying a hiring manager's post, refusing to scrape LinkedIn, adding to the tracker, and running and debriefing a mock interview. Each suite also has a case checking its skills stay quiet on unrelated requests.
+
+If you change a skill, run the full gate before you push:
+
+```
+git config core.hooksPath .githooks   # once per clone: runs the gate on every git push
+scripts/pre-push.sh                   # or run it by hand
+```
+
+It validates the plugins, checks that every file a skill points to ships with it, scans for personal data, then runs all the evals. A full eval run takes a while and uses your Claude credentials. `EVAL_MAX_COST` caps the cost (default $15).
+
 ## Credits
 
 The humanizer started from Aditya Vempaty's The Humanizer. The Karpathy review adapts Forrest Chang's andrej-karpathy-skills. Details in [CREDITS.md](CREDITS.md).

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Blocks every push unless scripts/pre-push.sh passes (validation, references, privacy, evals).
+# Enable once per clone:  git config core.hooksPath .githooks
+exec "$(git rev-parse --show-toplevel)/scripts/pre-push.sh"

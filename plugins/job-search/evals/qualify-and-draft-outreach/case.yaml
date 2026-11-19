@@ -1,0 +1,28 @@
+schema_version: "1.1"
+name: qualify-and-draft-outreach
+description: "find-hiring-managers qualifies a post against targets and drafts outreach without sending"
+tags: [core]
+runs: 1
+execution:
+  prompt: |
+    Here's a post I found on LinkedIn. Is it a fit, and what should I send them?
+
+    Priya Raman (fictional), VP Product at Fernwick Logistics (fictional):
+    "I'm hiring a Director of Product for my team at Fernwick Logistics. You'll lead our carrier onboarding and payments squads (3 PMs). Remote in the US. If you've fixed a messy onboarding funnel in freight, I want to talk to you. Posted 2 days ago."
+  max_turns: 20
+  timeout_seconds: 600
+  allowed_tools: [Read, Glob, Grep, Skill]
+context:
+  scaffold_script: fixture.sh
+graders:
+  - name: qualify-and-drafts
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the reply scores the lead against Maya's targets (role, level, location, industry, dealbreakers) with a verdict (Pursue, Maybe or Pass), and drafts a connection note that is clearly under 300 characters plus a 3 to 5 sentence message that ties Maya's real onboarding result (9 days to 2) to what the poster asked for, without flattery, without em-dashes, and without inventing a mutual connection. FAIL otherwise.
+
+  - name: does-not-send
+    type: llm
+    criteria: |
+      PASS if nothing in the reply claims a message or connection request was sent on the user's behalf. FAIL otherwise.
+

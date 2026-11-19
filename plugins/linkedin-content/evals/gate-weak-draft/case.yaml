@@ -1,0 +1,35 @@
+schema_version: "1.1"
+name: gate-weak-draft
+description: "Playbook CHECK mode flags a weak, engagement-bait draft without rewriting it"
+tags: [core]
+runs: 1
+execution:
+  prompt: |
+    Gate this:
+
+    Excited to share some thoughts on the future of logistics!
+
+    The industry is changing fast and innovation is key. Here are 5 lessons I've learned on my journey.
+
+    1. Leverage data
+    2. Put customers first
+    3. Embrace change
+    4. Build great teams
+    5. Never stop learning
+
+    Agree?
+  max_turns: 20
+  timeout_seconds: 600
+  allowed_tools: [Read, Glob, Grep, Skill]
+context:
+  scaffold_script: fixture.sh
+graders:
+  - name: check-format
+    type: regex
+    pattern: "RULES: *[0-5]/5"
+  - name: verdict
+    type: llm
+    weight: 3
+    criteria: |
+      PASS if the reply uses a rule-by-rule table, marks Rule 2 (first paragraph tells the reader what they get) as FAIL and Rule 5 (something to reply to / engagement bait 'Agree?') as FAIL, gives a one-line smallest fix for fails, and does NOT provide a full rewritten post. FAIL otherwise.
+
