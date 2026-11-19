@@ -16,7 +16,7 @@ graders:
   - name: exact-header
     type: regex
     weight: 2
-    pattern: "^id,company,role,level,location,source,contact_name,contact_title,link,date_found,fit_score,stage,outreach_status,applied_date,resume_used,interview_dates,last_contact,next_step,next_step_due,notes"
+    pattern: "^id,company,role,level,location,source,contact_name,contact_title,link,date_found,fit_score,stage,outreach_status,applied_date,resume_used,interview_dates,last_contact,next_step,next_step_due,notes,connection,warm_intro"
     target: {source: file, path: tracker/pipeline.csv}
   - name: row-added
     type: regex

@@ -62,7 +62,7 @@ Ask:
 Write `profile/settings.md` in the shape of `templates/settings.md`. If they chose a CSV, offer to create it with this header row (the same columns the pipeline-tracker skill uses):
 
 ```
-id,company,role,level,location,source,contact_name,contact_title,link,date_found,fit_score,stage,outreach_status,applied_date,resume_used,interview_dates,last_contact,next_step,next_step_due,notes
+id,company,role,level,location,source,contact_name,contact_title,link,date_found,fit_score,stage,outreach_status,applied_date,resume_used,interview_dates,last_contact,next_step,next_step_due,notes,connection,warm_intro
 ```
 
 ## Round 3: about-me.md (stories, used everywhere)

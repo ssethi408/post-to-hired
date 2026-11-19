@@ -308,11 +308,23 @@ Then tell me what follow-ups are due this week.""",
      RW + ["Bash(ls:*)", "Bash(mkdir:*)", "Bash(date:*)"],
      [file_has("exact-header", "tracker/pipeline.csv",
                "^id,company,role,level,location,source,contact_name,contact_title,link,date_found,fit_score,stage,"
-               "outreach_status,applied_date,resume_used,interview_dates,last_contact,next_step,next_step_due,notes", 2),
+               "outreach_status,applied_date,resume_used,interview_dates,last_contact,next_step,next_step_due,notes,connection,warm_intro", 2),
       file_has("row-added", "tracker/pipeline.csv", "Fernwick", 2),
       file_has("next-step-due-date", "tracker/pipeline.csv", r"Fernwick[^\n]*20\d\d-\d\d-\d\d[^\n]*20\d\d-\d\d-\d\d"),
       judge("due-dates-are-dates", "PASS if the reply gives at least one due date as an actual calendar date (for example 'Tue Nov 25' or '2026-11-25'), not only 'this week' or 'next week'. FAIL otherwise.")],
      fixture=MAYA, max_turns=20, timeout=600)
+
+case("job-search", "tracker-warm-intro-followups",
+     "pipeline-tracker records a warm intro, then sets the 1-business-day follow-up after the intro is made",
+     """Add this to my tracker: Director of Product at Fernwick Logistics, remote US, from a LinkedIn post by Priya Raman (VP Product), found today, fit score 18. We're connected through Dev Kapoor, and I asked Dev for an intro today.
+Then: Dev just introduced me to Priya. Update the tracker and tell me what's next and when.""",
+     RW + ["Bash(ls:*)", "Bash(mkdir:*)", "Bash(date:*)"],
+     [file_has("new-columns-in-header", "tracker/pipeline.csv", "notes,connection,warm_intro", 2),
+      file_has("warm-intro-recorded", "tracker/pipeline.csv", "Dev Kapoor", 2),
+      file_has("intro-made-status", "tracker/pipeline.csv", "Intro made", 2),
+      judge("next-step-one-business-day", "PASS if the reply says the next step is to message Priya and gives a due date that is one business day from today (written as a real date), not later. FAIL otherwise.", 2),
+      judge("no-sending", "PASS if nothing in the reply claims a message was sent to Priya or Dev on the user's behalf. FAIL otherwise.")],
+     fixture=MAYA, max_turns=25, timeout=600)
 
 case("job-search", "mock-interview-start",
      "mock-interview runs the researcher agent, shows a short brief without the question list, and asks at most one question",

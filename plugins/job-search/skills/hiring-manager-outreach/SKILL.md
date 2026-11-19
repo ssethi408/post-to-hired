@@ -69,7 +69,7 @@ Show, in this order: **How you're connected**, **Warm intro** (who to ask and th
 
 If the user shares a message they actually sent and liked, ask whether to save it to `profile/outreach-examples.md` so future drafts match it. Save only on yes, and only there.
 
-If the `pipeline-tracker` skill is available (it may be listed as `job-search:pipeline-tracker`), ask whether to add or update the lead, with the connection and warm-intro contact in its notes.
+If the `pipeline-tracker` skill is available (it may be listed as `job-search:pipeline-tracker`), ask whether to add or update the lead: the connection goes in `connection`, the person asked for an intro in `warm_intro`, and `outreach_status` is `Intro requested` once the user asks them (otherwise `Drafted`).
 
 ## Never
 
