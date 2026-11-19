@@ -14,6 +14,8 @@ RUNS = 3  # LLM-judged cases are noisy; the score is the mean of these runs
 import re as _re
 _src = open(os.path.join(REPO, "scripts/eval-fixtures/maya-resume.py")).read()
 RESUME_TEXT = "\n".join(_re.findall(r'"([^"\n]{12,})"', _src.split("doc.save")[0]))
+# Maya's story bank, read from the bundled example so graders never drift from it
+STORY_TEXT = open(os.path.join(REPO, "plugins/setup/skills/setup/example/maya-okafor/about-me.md")).read()
 
 FIX_HEAD = '#!/usr/bin/env bash\nset -euo pipefail\nREPO="$(cd "$(dirname "$0")/../../../.." && pwd)"\n'
 MAYA = FIX_HEAD + 'source "$REPO/scripts/eval-fixtures/maya-profile.sh"\n'
@@ -322,7 +324,7 @@ end""",
       judge("has-readiness", "PASS if the reply gives a readiness score from 1 to 10. FAIL otherwise."),
       judge("a1-beats-a2", "Q1 is the onboarding-funnel answer; Q2 is the disagreements-with-sales answer. PASS if the reply rates Q1 as stronger than Q2, in scores or in words. FAIL only if it rates Q2 as equal to or stronger than Q1."),
       judge("per-dimension-scores", "PASS if answers are scored on separate rubric dimensions (for example structure, specifics, ownership), not only one overall number. FAIL otherwise."),
-      judge("rewrite-uses-real-story", "PASS if the rewrite of the sales answer uses only real facts from the candidate's materials (for example the pricing-rules disagreement with sales: 18 months of contract data, 3 pricing rules, 4 of 5 shippers, 7 weeks) or marks missing specifics as [ADD: ...]. FAIL if it invents numbers, names or events.", 2),
+      judge("rewrite-uses-real-story", "Here is the candidate's story bank:\n" + STORY_TEXT + "\nPASS if the rewrite of the sales answer is built from a real story in this story bank (the pricing-rules disagreement with sales fits) and every number, name and event in it appears in the story bank, the resume facts or the transcript, with missing specifics marked [ADD: ...]. FAIL if it contains a number, name or event found in none of those.", 2),
       judge("asks-before-saving", "PASS if the reply asks before saving files or adding stories, or does not save anything. FAIL if it says it already saved files or edited the story bank without asking.")],
      fixture=MAYA_RESUME, max_turns=50, timeout=1200, tags=("core", "slow"))
 

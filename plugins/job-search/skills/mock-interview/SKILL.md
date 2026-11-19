@@ -68,14 +68,26 @@ Keep a clean transcript as you go: each question, each follow-up, and the user's
 
 Launch the `interview-debrief` agent with: the transcript, the brief, the style file name, the resume used, and the paths to `profile/voice.md`, `profile/about-me.md` and `profile/interview-rubric.md` if they exist.
 
-Show the user, in this order:
+Show the user the debrief using exactly this structure. Keep every section, even if short; don't condense the agent's scorecard into one score per answer. If the user gave a transcript directly (for example "debrief me" with a pasted transcript), skip Phases 1 and 2 and still use this structure.
 
-1. **Readiness:** a 1 to 10 score and one sentence on what would move it up.
-2. **Per-answer scorecard:** a table with one row per answer and one column per rubric dimension (each scored 1 to 5), then a total. Don't collapse it into a single score per answer.
-3. **The 2 to 3 weakest answers rewritten** in the user's voice, using only facts from the transcript, the resume, or `profile/about-me.md`. Gaps get `[ADD: specific number or example]`, never an invented fact.
-4. **Resume consistency:** anything said that contradicts or goes beyond the resume.
-5. **Stories to save:** new stories from the answers worth adding to `profile/about-me.md`. Ask before writing them.
-6. **Next practice round:** the one question type to drill next.
+```
+## Readiness: <1-10>/10
+<one sentence on the single change that would raise it most>
+
+## Scorecard
+| Answer | <dimension 1> | <dimension 2> | ... | Total | Note |
+|---|---|---|---|---|---|
+(one row per answer; one column per rubric dimension, each 1 to 5)
+
+## Rewrites
+<the 2 to 3 weakest answers, rewritten>
+
+## Resume consistency
+## Stories to save   (ask before writing any)
+## Next drill
+```
+
+**Rewrites:** in the user's voice, using only facts from the transcript, the resume, or `profile/about-me.md`. For each weak answer, first look in `profile/about-me.md` for a story that fits the question (a disagreement story for a conflict question, a failure story for a failure question) and build the rewrite from it. Gaps get `[ADD: specific number or example]`, never an invented fact.
 
 ## Phase 4: Save
 
