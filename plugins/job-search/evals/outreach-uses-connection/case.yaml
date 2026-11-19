@@ -1,0 +1,57 @@
+schema_version: "1.1"
+name: outreach-uses-connection
+description: "hiring-manager-outreach opens with a real connection, asks about it, and never claims an overlap it can't see"
+tags: [core]
+runs: 3
+execution:
+  prompt: |
+    Write me a LinkedIn message to this hiring manager.
+
+    Priya Raman (fictional), VP Product at Fernwick Logistics (fictional), posted:
+    "I'm hiring a Director of Product for my team at Fernwick Logistics. You'll lead our carrier onboarding and payments squads (3 PMs). Remote in the US. If you've fixed a messy onboarding funnel in freight, I want to talk to you."
+
+    From her LinkedIn profile:
+    - Mutual connections: Dev Kapoor (fictional)
+    - Experience: Fernwick Logistics, VP Product (2021 to now); Quillmoor Freight, Senior PM (2015 to 2019)
+    - Education: Ohio State University
+  max_turns: 20
+  timeout_seconds: 600
+  allowed_tools: [Read, Glob, Grep, Skill]
+context:
+  scaffold_script: fixture.sh
+graders:
+  - name: names-mutual-connection
+    type: llm
+    weight: 2
+    criteria: |
+      PASS if the drafted message to Priya names Dev Kapoor as someone they both know. FAIL otherwise.
+  - name: asks-about-connection
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the drafted message asks Priya one light, friendly question about a shared link (Dev Kapoor or Quillmoor). FAIL otherwise.
+  - name: no-overlap-claim
+    type: llm
+    weight: 2
+    criteria: |
+      Priya left Quillmoor in 2019 and the user's profile says she has been there about 6 years. PASS if nothing in the reply claims they worked at Quillmoor at the same time or know each other from there. FAIL otherwise.
+  - name: uses-real-result
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the drafted message mentions the onboarding result (9 days to 2) and ties it to what Priya asked for. FAIL otherwise.
+  - name: warm-intro-suggested
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the reply suggests asking Dev Kapoor for an intro or a good word. FAIL otherwise.
+  - name: message-short
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the drafted message to Priya is about 150 words or fewer. FAIL otherwise.
+  - name: does-not-send
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if nothing in the reply claims a message or connection request was sent on the user's behalf. FAIL otherwise.

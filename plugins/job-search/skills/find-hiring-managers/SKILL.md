@@ -47,15 +47,9 @@ Output a table, one row per lead: poster / company / role / fit score / verdict 
 
 ## Mode 3: Outreach
 
-For each lead marked Pursue, or any lead the user picks:
+For each lead marked Pursue, or any lead the user picks, load the `hiring-manager-outreach` skill (it may be listed as `job-search:hiring-manager-outreach`) and follow it. It checks how the user is connected to the hiring manager, finds a warm intro, and drafts the message and a connection note under 300 characters. Pass along what you already have: the post, the job listing and the research from Mode 2.
 
-1. Read `profile/voice.md` and `profile/about-me.md`.
-2. Find the one true, specific link between the user's experience and what the poster said they need. Quote the post's own words back. If there is no real link, say so rather than forcing one.
-3. Draft two versions:
-   - **Connection note:** under 300 characters, the length LinkedIn allows on a connection request.
-   - **Message:** 3 to 5 sentences. What caught their eye in the post, the one relevant result from their own work, a clear and easy ask (a 15-minute call, or "who's the best person to send my resume to").
-4. Rules: no flattery, no "I came across your post", no attachments in the first message, no em-dashes, no invented mutual connections or shared history. Use their first name.
-5. Show both drafts. The user edits and sends them.
+If that skill isn't available, draft a 3 to 5 sentence message and a connection note under 300 characters yourself: quote what the poster said they need, give one true result from `profile/about-me.md` that matches it, and ask for a 15-minute call. No flattery, no em-dashes, no invented connections. The user edits and sends them.
 
 ## Mode 4: Hand off to the tracker
 

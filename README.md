@@ -30,6 +30,7 @@ In Claude Code, each skill shows up with its plugin's name in front, for example
 | Skill / agent | What it does |
 |---|---|
 | `find-hiring-managers` | Qualifies hiring-manager posts you find on LinkedIn against your targets, researches the role, and drafts outreach in your voice. You do the searching and sending |
+| `hiring-manager-outreach` | Checks how you're connected to a hiring manager (mutual connections, shared school or employer), suggests a warm intro, and drafts a short message that ties your real results to the posting |
 | `pipeline-tracker` | One row per opportunity, from lead to offer. Flags follow-ups that are due and gives a weekly summary |
 | `tailor-resume` | Tailors your master resume to a job description, reviews every change with you, then saves a PDF per application |
 | `mock-interview` | Runs a live mock interview for a specific role and stage, one question at a time, then debriefs every answer |
