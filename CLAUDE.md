@@ -8,6 +8,10 @@ Every push must pass `scripts/pre-push.sh`. It runs:
    terms in the local, gitignored `.private-terms` file
 4. `claude plugin eval` on all three plugins (the cases in `plugins/*/evals/`)
 
+Every eval runs on **Sonnet (`claude-sonnet-5-5`) at medium effort**, judged by Sonnet. These live in
+`scripts/eval-config.sh`, shared by the gate and by single-case runs: `source scripts/eval-config.sh && run_eval <plugin> <case> out.json`.
+Don't run evals with other settings and treat the result as a pass.
+
 The git pre-push hook in `.githooks/` runs it automatically. The SessionStart hook in
 `.claude/settings.json` sets `core.hooksPath` for you; if it is not set, run
 `git config core.hooksPath .githooks`. Never bypass it with `--no-verify`. If it fails,

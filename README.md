@@ -129,7 +129,7 @@ git config core.hooksPath .githooks   # once per clone: runs the gate on every g
 scripts/pre-push.sh                   # or run it by hand
 ```
 
-It validates the plugins, checks that every file a skill points to ships with it, scans for personal data, then runs all the evals. A full eval run takes a while and uses your Claude credentials. `EVAL_MAX_COST` caps the cost (default $15).
+It validates the plugins, checks that every file a skill points to ships with it, scans for personal data, then runs all the evals. Every eval runs on Sonnet at medium effort (set in `scripts/eval-config.sh`). A full eval run takes a while and uses your Claude credentials. `EVAL_MAX_COST` caps the cost (default $15).
 
 ## Credits
 

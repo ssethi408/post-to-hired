@@ -78,7 +78,8 @@ if [ "$(uname -s)" = "Linux" ] && ! { command -v bwrap >/dev/null && command -v 
   bad "eval sandbox missing: install bubblewrap and socat (e.g. sudo apt-get install -y bubblewrap socat)"
   exit 1
 fi
-EVAL_THRESHOLD="${EVAL_THRESHOLD:-0.8}"
+source "$(dirname "$0")/eval-config.sh"   # model, effort, judge, threshold: shared with single-case runs
+printf '   model %s at %s effort, judged by %s\n' "$EVAL_MODEL" "$EVAL_EFFORT" "$EVAL_JUDGE_MODEL"
 # A mean of 3 runs can land a hair under the threshold from floating-point rounding (0.4+1+1)/3 = 0.7999999999999999.
 # Compare against a value a billionth lower so a score exactly at the threshold passes.
 EVAL_THRESHOLD_CMP=$(python3 -I -c "import sys; print(float(sys.argv[1]) - 1e-9)" "$EVAL_THRESHOLD")
@@ -88,13 +89,7 @@ outdir="$(mktemp -d)"
 HISTORY="${GATE_HISTORY:-.gate-history.tsv}"   # local, gitignored: one line per case per gate run
 for p in "${PLUGINS[@]}"; do
   printf '   running %s evals...\n' "$p"
-  claude plugin eval "plugins/$p" \
-    --trust-plugin --scaffold --ablation none --no-publish \
-    --threshold "$EVAL_THRESHOLD_CMP" --max-cost-usd "$EVAL_MAX_COST" "${runs_flag[@]}" \
-    --judge-model "${EVAL_JUDGE_MODEL:-sonnet}" \
-    --concurrency "${EVAL_CONCURRENCY:-3}" \
-    --allow-tools Write Edit WebFetch WebSearch Agent Bash \
-    --json "$outdir/$p.json" >"$outdir/$p.log" 2>&1
+  run_eval "$p" "" "$outdir/$p.json" >"$outdir/$p.log" 2>&1
   code=$?
   summary=$(python3 -I - "$outdir/$p.json" "$EVAL_THRESHOLD" <<'PY' 2>/dev/null
 import json, sys
