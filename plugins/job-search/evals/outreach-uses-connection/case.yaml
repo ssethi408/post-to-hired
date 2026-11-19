@@ -34,7 +34,7 @@ graders:
     type: llm
     weight: 2
     criteria: |
-      Priya left Quillmoor in 2019 and the user's profile says she has been there about 6 years. PASS if nothing in the reply claims they worked at Quillmoor at the same time or know each other from there. FAIL otherwise.
+      Priya (the hiring manager) worked at Quillmoor from 2015 to 2019. Maya (the user) joined Quillmoor later, around 2020. PASS if nothing in the reply claims Priya and Maya worked at Quillmoor at the same time or know each other from there. FAIL otherwise.
   - name: uses-real-result
     type: llm
     weight: 1

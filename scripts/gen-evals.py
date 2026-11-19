@@ -285,7 +285,7 @@ From her LinkedIn profile:
      R,
      [judge("names-mutual-connection", "PASS if the drafted message to Priya names Dev Kapoor as someone they both know. FAIL otherwise.", 2),
       judge("asks-about-connection", "PASS if the drafted message asks Priya one light, friendly question about a shared link (Dev Kapoor or Quillmoor). FAIL otherwise."),
-      judge("no-overlap-claim", "Priya left Quillmoor in 2019 and the user's profile says she has been there about 6 years. PASS if nothing in the reply claims they worked at Quillmoor at the same time or know each other from there. FAIL otherwise.", 2),
+      judge("no-overlap-claim", "Priya (the hiring manager) worked at Quillmoor from 2015 to 2019. Maya (the user) joined Quillmoor later, around 2020. PASS if nothing in the reply claims Priya and Maya worked at Quillmoor at the same time or know each other from there. FAIL otherwise.", 2),
       judge("uses-real-result", "PASS if the drafted message mentions the onboarding result (9 days to 2) and ties it to what Priya asked for. FAIL otherwise."),
       judge("warm-intro-suggested", "PASS if the reply suggests asking Dev Kapoor for an intro or a good word. FAIL otherwise."),
       judge("message-short", "PASS if the drafted message to Priya is about 150 words or fewer. FAIL otherwise."),
