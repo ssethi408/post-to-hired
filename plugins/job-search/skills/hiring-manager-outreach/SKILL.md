@@ -28,7 +28,9 @@ If `profile/` is missing, say so and offer the `setup` skill (it may be listed a
 
 From the user, get:
 1. **The post:** the hiring manager's name, title, company and what they wrote.
-2. **The job posting** if there is one. If it's a public URL, fetch it and pull out the role's real focus (it can differ from the post), its 2 or 3 most important requirements, location and pay if listed.
+2. **The job posting** if there is one. If it's a public URL on the company's site or a job board, fetch it and pull out the role's real focus (it can differ from the post), its 2 or 3 most important requirements, location and pay if listed. If the page needs JavaScript and comes back empty, search the web for the exact job title plus the company name and use the posting that turns up. If the only copy is on LinkedIn, ask the user to paste it; don't open LinkedIn pages yourself.
+   - **Pay:** if the posting lists pay below the floor in `profile/targets.md`, say so in your notes to the user, never in the message.
+4. **Have you written to them before?** Check the tracker for a row with this person as `contact_name`. If you can't check, ask the user once. If they've already messaged, write a follow-up instead of a first message.
 3. **How they're connected.** If the user hasn't given it, ask once, and say exactly what to copy from the hiring manager's LinkedIn profile:
    - the "mutual connections" line (who the shared connections are),
    - anything under "Highlights" (for example "You both studied at ..." or "You both worked at ..."),
@@ -59,6 +61,8 @@ Structure, with a short paragraph per part:
 
 Rules:
 - **Vary the lead.** Don't open with the user's job title, team size or the same headline result every time. Pick the proof that fits this posting.
+- **Pick proof by role type.** Use a result only where it fits: an AI or security result for AI or security roles, a payments result for payments roles. Describe each by what it did ("vetted 100+ AI features before they shipped"), not by an internal name the reader won't know.
+- **Don't claim the user applied** unless they said they did.
 - Use only facts from `profile/about-me.md`, the user's resume or what the user said in this conversation. No flattery, no "I came across your post", no em-dashes. Don't mention gaps.
 - 150 words or fewer. Casual and warm, the way the user actually talks, not a resume summary.
 - Also draft a **connection-request note** under 300 characters, the most LinkedIn allows, for when they aren't connected yet.
@@ -76,4 +80,7 @@ If the `pipeline-tracker` skill is available (it may be listed as `job-search:pi
 - Send, connect, or post anything on the user's behalf.
 - Scrape LinkedIn or ask for the user's LinkedIn password or cookies.
 - Invent a mutual connection, a shared school or employer, an overlap in dates, or a result the user didn't have.
+- Mention pay, gaps, or a below-target salary in the message.
+- Say the user applied unless they told you they did.
+- Open, read or automate LinkedIn pages in a browser. The user copies what's needed from LinkedIn and pastes it.
 - Save anything outside the user's `profile/` or tracker.

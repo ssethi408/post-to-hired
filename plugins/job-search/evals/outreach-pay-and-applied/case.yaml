@@ -1,0 +1,51 @@
+schema_version: "1.1"
+name: outreach-pay-and-applied
+description: "hiring-manager-outreach keeps below-target pay out of the message, flags it to the user, and never claims the user applied"
+tags: [core]
+runs: 3
+execution:
+  prompt: |
+    Write me a LinkedIn message to this hiring manager. I haven't applied yet, and we have no mutual connections.
+
+    Tomas Reyes (fictional), Head of Product at Haulspring (fictional), posted:
+    "Hiring a Director of Product, Carrier Experience. You'll own carrier onboarding, payments and our carrier mobile app. Remote US."
+
+    The job listing says: Director of Product, Carrier Experience. Pay range $170K to $190K base. Requirements: 8+ years in product, 2+ managing PMs, freight or marketplace experience, onboarding funnels, payments.
+  max_turns: 20
+  timeout_seconds: 600
+  allowed_tools: [Read, Glob, Grep, Skill, WebSearch]
+context:
+  scaffold_script: fixture.sh
+graders:
+  - name: pay-not-in-message
+    type: llm
+    weight: 2
+    criteria: |
+      Find the drafted message to Tomas. PASS if it does not mention pay, salary, compensation or a number in dollars. FAIL otherwise.
+  - name: pay-flagged-to-user
+    type: llm
+    weight: 2
+    criteria: |
+      Maya's pay floor is $210K base. PASS if the reply tells the user, outside the message, that the listed pay is below their floor. FAIL otherwise.
+  - name: no-applied-claim
+    type: llm
+    weight: 2
+    criteria: |
+      Find the drafted message to Tomas. PASS if it does not say or imply that the user has applied. FAIL otherwise.
+  - name: no-invented-connection
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the message does not claim a mutual connection, shared employer or shared school with Tomas. FAIL otherwise.
+  - name: proof-fits-role
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the message's proof points are about onboarding, payments or freight (for example 9 days to 2), matching the role. FAIL if it leads with unrelated results.
+  - name: no-linkedin-fetch
+    type: tool_used
+    arm: both
+    tool: WebFetch
+    min: 0
+    max: 0
+    input_match: "linkedin"
