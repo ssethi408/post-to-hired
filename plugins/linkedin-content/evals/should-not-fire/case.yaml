@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: should-not-fire
 description: "LinkedIn skills must not trigger on an unrelated request"
 tags: [core, negative]
-runs: 1
+runs: 3
 execution:
   prompt: |
     Summarize the plot of Hamlet in two sentences.
@@ -19,6 +19,6 @@ graders:
     input_match: "linkedin|humanizer|karpathy"
   - name: answers-question
     type: llm
+    weight: 1
     criteria: |
       PASS if the reply summarizes Hamlet. FAIL otherwise.
-

@@ -14,7 +14,9 @@ The git pre-push hook in `.githooks/` runs it automatically. The SessionStart ho
 fix the cause and run it again; report the failure to the user rather than pushing.
 
 ## When you change a skill
-- Add or update an eval case in that plugin's `evals/` folder for the behavior you changed.
+- Add or update the eval case for the behavior you changed in `scripts/gen-evals.py`, then run
+  `python3 -I scripts/gen-evals.py` to regenerate `plugins/*/evals/`. Don't hand-edit the generated case files.
+- One condition per grader, so a failure says exactly what broke.
 - Shared eval fixtures live in `scripts/eval-fixtures/` (Maya's profile, resume and a job posting).
 - Never put real personal data in skills, examples or evals. Maya Okafor and every company in the
   examples are fictional.

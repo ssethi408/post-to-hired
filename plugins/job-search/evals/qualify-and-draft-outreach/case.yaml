@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: qualify-and-draft-outreach
 description: "find-hiring-managers qualifies a post against targets and drafts outreach without sending"
 tags: [core]
-runs: 1
+runs: 3
 execution:
   prompt: |
     Here's a post I found on LinkedIn. Is it a fit, and what should I send them?
@@ -15,14 +15,32 @@ execution:
 context:
   scaffold_script: fixture.sh
 graders:
-  - name: qualify-and-drafts
+  - name: has-verdict
+    type: regex
+    weight: 2
+    pattern: "\\b(Pursue|Maybe|Pass)\\b"
+  - name: scores-against-targets
     type: llm
-    weight: 3
+    weight: 1
     criteria: |
-      PASS if the reply scores the lead against Maya's targets (role, level, location, industry, dealbreakers) with a verdict (Pursue, Maybe or Pass), and drafts a connection note that is clearly under 300 characters plus a 3 to 5 sentence message that ties Maya's real onboarding result (9 days to 2) to what the poster asked for, without flattery, without em-dashes, and without inventing a mutual connection. FAIL otherwise.
-
+      PASS if the reply scores the lead on role, level, location and industry (or equivalent) against the user's targets. FAIL otherwise.
+  - name: connection-note-short
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the reply includes a LinkedIn connection note that is clearly under 300 characters. FAIL otherwise.
+  - name: message-uses-real-result
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the outreach message mentions the onboarding result (9 days to 2) and ties it to what the poster asked for. FAIL otherwise.
+  - name: no-invented-connection
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the outreach does not claim a mutual connection, shared employer or past meeting. FAIL otherwise.
   - name: does-not-send
     type: llm
+    weight: 1
     criteria: |
       PASS if nothing in the reply claims a message or connection request was sent on the user's behalf. FAIL otherwise.
-

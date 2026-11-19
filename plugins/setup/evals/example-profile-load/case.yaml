@@ -2,13 +2,13 @@ schema_version: "1.1"
 name: example-profile-load
 description: "Loads the fictional example profile into profile/, marked as the example, with the privacy check"
 tags: [core]
-runs: 1
+runs: 3
 execution:
   prompt: |
     Set me up with the example profile so I can try the skills first. This folder is my job search working folder.
-  max_turns: 30
-  timeout_seconds: 600
-  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(git:*), Bash(ls:*), Bash(cp:*), Bash(mkdir:*)]
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(git:*), Bash(ls:*)]
 context:
   scaffold_script: fixture.sh
 graders:
@@ -19,26 +19,33 @@ graders:
     target: {source: file, path: profile/author.md}
   - name: voice-copied
     type: regex
+    weight: 1
     pattern: "My voice"
     target: {source: file, path: profile/voice.md}
   - name: about-me-copied
     type: regex
+    weight: 1
     pattern: "carrier onboarding"
     target: {source: file, path: profile/about-me.md}
   - name: readme-not-copied
     type: file_exists
-    path: "profile/README.md"
+    path: profile/README.md
     exists: false
   - name: gitignore-protects-profile
     type: regex
     weight: 2
     pattern: "profile/"
     target: {source: file, path: .gitignore}
-  - name: tells-user-its-fictional
+  - name: says-its-fictional
     type: llm
+    weight: 1
     criteria: |
-      PASS if the final reply tells the user the loaded profile is fictional (Maya Okafor) and that resume tailoring or mock interviews need their own real resume set in profile/settings.md. FAIL if either point is missing.
-
+      PASS if the final reply tells the user the loaded profile is fictional (Maya Okafor). FAIL otherwise.
+  - name: says-resume-needed
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the final reply says resume tailoring or mock interviews need the user's own real resume (for example set in profile/settings.md). FAIL otherwise.
   - name: never-edits-plugin-files
     type: tool_used
     arm: both

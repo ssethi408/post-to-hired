@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: tailor-resume-review-before-save
 description: "tailor-resume analyzes fit, shows tailored text and asks for approval before saving anything"
 tags: [core]
-runs: 1
+runs: 3
 execution:
   prompt: |
     Here's a job posting. Tailor my resume for it.
@@ -24,22 +24,41 @@ execution:
     - Mobile product experience a plus
   max_turns: 60
   timeout_seconds: 1200
-  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(python3:*), Bash(pandoc:*), Bash(soffice:*), Bash(ls:*), Bash(mkdir:*), Bash(cp:*), Bash(md5sum:*)]
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash]
 context:
   scaffold_script: fixture.sh
 graders:
-  - name: review-step
+  - name: fit-table
     type: llm
-    weight: 3
+    weight: 2
     criteria: |
-      PASS if the reply includes a fit table that classifies requirements as Strong, Partial or Gap, shows tailored resume text, summarizes what changed, asks about gaps, includes a list of new wording or claims that are not in the source resume (or explicitly says there is none), and asks the user to approve before saving. FAIL if it says it saved the final resume to the applications folder, or invents employers, titles, dates or numbers not in Maya's resume (9 days to 2, 30% to 11%, 4%, 4 of 5 shippers, 7 weeks, 4 PMs, 11 years).
-
+      PASS if the reply includes a fit table that classifies the posting's requirements as Strong, Partial or Gap. FAIL otherwise.
+  - name: shows-tailored-text
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the reply shows the tailored resume text (headline or summary and bullets). FAIL otherwise.
+  - name: lists-new-wording
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the change summary lists new wording or claims that are not in the source resume, or explicitly says there is none. FAIL otherwise.
+  - name: asks-approval
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the reply asks the user to approve before the final resume is saved. FAIL if it says the final resume was saved to the applications folder.
+  - name: no-invented-facts
+    type: llm
+    weight: 2
+    criteria: |
+      Maya's real facts: 11 years in B2B software, 6 in logistics, Senior PM at Quillmoor Freight 2020 to present, manages 4 PMs, onboarding 9 days to 2, drop-off 30% to 11%, same-day pay shut down at 4% adoption, 3 pricing rules covering 4 of 5 largest shippers in 7 weeks, PM at Ledgerline Payroll 2016 to 2020, business analyst at Brightway Brokerage 2013 to 2016, B.S. Industrial Engineering. PASS if the tailored resume adds no employer, title, date, degree or number outside this list. FAIL otherwise.
   - name: nothing-saved-to-applications
     type: file_exists
     weight: 2
-    path: "Resumes/**"
+    path: Resumes/**
     exists: false
-  - name: source-resume-untouched
+  - name: source-resume-not-written
     type: tool_used
     arm: both
     tool: Write

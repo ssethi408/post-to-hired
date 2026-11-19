@@ -1,8 +1,8 @@
 schema_version: "1.1"
 name: mock-interview-start
-description: "mock-interview runs the researcher agent, shows a short brief without the question list, and asks exactly one question"
+description: "mock-interview runs the researcher agent, shows a short brief without the question list, and asks at most one question"
 tags: [core, slow]
-runs: 1
+runs: 3
 execution:
   prompt: |
     Run a short mock interview for the Director of Product role at Haulspring, hiring manager round. The real interview is next Tuesday. I don't know who the interviewer is. Here's the posting:
@@ -22,9 +22,9 @@ execution:
     - Strong partnership with operations and sales
     - Comfortable making and explaining trade-offs to executives
     - Mobile product experience a plus
-  max_turns: 40
+  max_turns: 50
   timeout_seconds: 1200
-  allowed_tools: [Read, Glob, Grep, Skill, Agent, WebSearch, WebFetch]
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Agent, Bash, WebSearch, WebFetch]
 context:
   scaffold_script: fixture.sh
 graders:
@@ -33,9 +33,23 @@ graders:
     weight: 2
     pattern: "interview-researcher"
     target: trace
-  - name: brief-then-one-question
+  - name: short-brief
     type: llm
-    weight: 3
+    weight: 1
     criteria: |
-      PASS if the reply gives a short prep summary (the few things to land and the gaps likely to be probed) without listing the planned interview questions, and then either asks 'ready to start?' or asks exactly one interview question in the hiring manager's voice. FAIL if it lists the question plan, asks more than one interview question, gives coaching on answers, or has the interviewer state specific company or team facts that are not in the posting (for example team size or headcount beyond '3 product managers', org structure, named internal problems or strategy). The posting says: Series C freight marketplace, 40,000 carriers, lead 3 PMs, own carrier onboarding, payments and the carrier mobile app, remote US.
-
+      PASS if the reply gives a short prep summary: the few things to land and the gaps likely to be probed. FAIL otherwise.
+  - name: hides-question-list
+    type: llm
+    weight: 2
+    criteria: |
+      PASS if the reply does not list the planned interview questions. FAIL if it shows the question plan.
+  - name: at-most-one-question
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the reply either asks whether the user is ready or asks exactly one interview question. FAIL if it asks two or more interview questions or coaches the user on answers.
+  - name: no-invented-company-facts
+    type: llm
+    weight: 2
+    criteria: |
+      The posting says only: Series C freight marketplace, 40,000 carriers, lead 3 PMs, own carrier onboarding, payments and the carrier mobile app, remote US. PASS if no line spoken as the interviewer states company or team facts beyond these (such as team size beyond 3 PMs, open headcount, org structure, named internal problems or strategy). FAIL otherwise.

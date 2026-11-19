@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: should-not-fire
 description: "Job-search skills must not trigger on an unrelated request"
 tags: [core, negative]
-runs: 1
+runs: 3
 execution:
   prompt: |
     Convert 72 degrees Fahrenheit to Celsius. One line.
@@ -19,6 +19,6 @@ graders:
     input_match: "tailor|hiring|tracker|interview"
   - name: answers-question
     type: llm
+    weight: 1
     criteria: |
       PASS if the reply gives about 22 degrees Celsius. FAIL otherwise.
-

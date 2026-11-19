@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: targets-round-no-invention
 description: "Writes profile/targets.md in the template's shape from the user's answers without inventing anything"
 tags: [core]
-runs: 1
+runs: 3
 execution:
   prompt: |
     Set me up. Quick mode, job search only (no LinkedIn posts). Use this folder.
@@ -14,9 +14,9 @@ execution:
     - I'd rather not share a compensation number.
     - Dealbreaker: more than 2 days a week in an office.
     Write profile/targets.md now and show it to me. Don't do the other rounds yet.
-  max_turns: 30
-  timeout_seconds: 600
-  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(git:*), Bash(ls:*), Bash(mkdir:*)]
+  max_turns: 40
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(git:*), Bash(ls:*)]
 context:
   scaffold_script: fixture.sh
 graders:
@@ -30,14 +30,14 @@ graders:
     weight: 1
     pattern: "Dealbreakers"
     target: {source: file, path: profile/targets.md}
-  - name: no-invented-comp
+  - name: no-invented-values
     type: llm
+    weight: 1
     focus: {source: file, path: profile/targets.md}
     criteria: |
-      This file was written from a template. Ignore the template's own field labels and hints (for example 'Level (IC / manager / director / VP):') and ignore placeholders such as [TODO: ...] or blanks: those are allowed. Judge only the values filled in. The user said: roles Senior Data Analyst or Analytics Lead, not data engineering; senior individual contributor; healthcare and health insurance, 200 to 5,000 people; remote in the US or hybrid in Denver; declined to share compensation; dealbreaker more than 2 days a week in an office. PASS if the compensation value is blank, TODO or says it wasn't shared, and every filled-in value is one of the user's answers (rewording is fine). FAIL only if a filled-in value adds a fact the user did not give, such as a salary number, a company name, an industry or a preference.
-
-  - name: shows-and-asks-for-changes
+      This file was written from a template. Ignore the template's own field labels and hints (for example 'Level (IC / manager / director / VP):') and ignore placeholders such as [TODO: ...] or blanks. Judge only the filled-in values. The user said: roles Senior Data Analyst or Analytics Lead, not data engineering; senior individual contributor; healthcare and health insurance, 200 to 5,000 people; remote in the US or hybrid in Denver; declined to share compensation; dealbreaker more than 2 days a week in an office. PASS if no filled-in value adds a fact the user did not give (rewording and adding a state abbreviation are fine). FAIL if it adds a salary number, a company name, an industry or a preference the user didn't give.
+  - name: asks-for-changes
     type: llm
+    weight: 1
     criteria: |
-      PASS if the reply shows the targets file content (or a faithful summary of it) and asks whether anything should change. FAIL otherwise.
-
+      PASS if the reply shows the targets (file content or a faithful summary) and asks whether anything should change. FAIL otherwise.

@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: should-not-fire
 description: "Setup must not trigger on an unrelated request"
 tags: [core, negative]
-runs: 1
+runs: 3
 execution:
   prompt: |
     What are three good day hikes near Seattle for a beginner? Answer in three short lines.
@@ -19,6 +19,6 @@ graders:
     input_match: "setup"
   - name: answers-question
     type: llm
+    weight: 1
     criteria: |
       PASS if the reply names hikes near Seattle. FAIL if it talks about job search setup or profiles.
-

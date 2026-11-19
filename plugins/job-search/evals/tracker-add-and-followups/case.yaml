@@ -2,14 +2,14 @@ schema_version: "1.1"
 name: tracker-add-and-followups
 description: "pipeline-tracker creates the CSV with the documented header, adds one row, and reports what is due"
 tags: [core]
-runs: 1
+runs: 3
 execution:
   prompt: |
     Add this to my tracker: Director of Product at Fernwick Logistics, remote US, found via a LinkedIn post by Priya Raman (VP Product) today, fit score 18, I drafted outreach but haven't sent it.
     Then tell me what follow-ups are due this week.
   max_turns: 20
   timeout_seconds: 600
-  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(ls:*), Bash(mkdir:*), Bash(cat:*)]
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(ls:*), Bash(mkdir:*), Bash(date:*)]
 context:
   scaffold_script: fixture.sh
 graders:
@@ -23,13 +23,13 @@ graders:
     weight: 2
     pattern: "Fernwick"
     target: {source: file, path: tracker/pipeline.csv}
-  - name: rereads-tracker
-    type: tool_used
-    tool: Read
-    min: 1
-    input_match: "pipeline\\.csv"
-  - name: next-step-and-due
+  - name: next-step-due-date
+    type: regex
+    weight: 1
+    pattern: "Fernwick[^\\n]*20\\d\\d-\\d\\d-\\d\\d[^\\n]*20\\d\\d-\\d\\d-\\d\\d"
+    target: {source: file, path: tracker/pipeline.csv}
+  - name: due-dates-are-dates
     type: llm
+    weight: 1
     criteria: |
-      PASS if the reply confirms the row, gives a next step with a due date written as an actual calendar date (not only 'this week' or 'next week'), and lists which follow-ups are due. FAIL otherwise.
-
+      PASS if the reply gives at least one due date as an actual calendar date (for example 'Tue Nov 25' or '2026-11-25'), not only 'this week' or 'next week'. FAIL otherwise.

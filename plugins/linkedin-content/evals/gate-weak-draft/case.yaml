@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: gate-weak-draft
 description: "Playbook CHECK mode flags a weak, engagement-bait draft without rewriting it"
 tags: [core]
-runs: 1
+runs: 3
 execution:
   prompt: |
     Gate this:
@@ -26,10 +26,25 @@ context:
 graders:
   - name: check-format
     type: regex
+    weight: 1
     pattern: "RULES: *[0-5]/5"
-  - name: verdict
+  - name: rule2-fails
+    type: regex
+    weight: 2
+    flags: i
+    pattern: "\\|\\s*2\\s*\\|[^\\n]*\\bFAIL\\b"
+  - name: rule5-fails
+    type: regex
+    weight: 2
+    flags: i
+    pattern: "\\|\\s*5\\s*\\|[^\\n]*\\bFAIL\\b"
+  - name: smallest-fix-column
+    type: regex
+    weight: 1
+    flags: i
+    pattern: "Smallest fix"
+  - name: no-full-rewrite
     type: llm
-    weight: 3
+    weight: 1
     criteria: |
-      PASS if the reply uses a rule-by-rule table, marks Rule 2 (first paragraph tells the reader what they get) as FAIL and Rule 5 (something to reply to / engagement bait 'Agree?') as FAIL, gives a one-line smallest fix for fails, and does NOT provide a full rewritten post. FAIL otherwise.
-
+      PASS if the reply does not contain a complete rewritten version of the post (one-line fixes, suggested opening lines and an offer to rewrite are fine). FAIL if it includes a full rewritten post.

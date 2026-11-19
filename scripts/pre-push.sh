@@ -6,12 +6,14 @@
 # 1. Plugin validation   (claude plugin validate)
 # 2. File references     (every file a skill points to ships inside its plugin)
 # 3. Privacy scan        (generic checks + your local private-terms list)
-# 4. Evals               (claude plugin eval on all three plugins, every case)
+# 4. Evals               (claude plugin eval on all three plugins, every case; shell access
+#                         is granted only inside the eval sandbox)
 #
 # Options (environment variables):
 #   EVAL_THRESHOLD   minimum score per case, 0..1        (default 0.8)
 #   EVAL_MAX_COST    cost ceiling in USD for all evals    (default 15)
-#   EVAL_RUNS        runs per case                       (default: each case's runs, 1)
+#   EVAL_RUNS        runs per case                       (default: each case's runs, 3)
+#   EVAL_CONCURRENCY parallel eval runs                  (default 3)
 #   PRIVATE_TERMS    path to your private terms list     (default .private-terms)
 set -uo pipefail
 cd "$(git rev-parse --show-toplevel)"
@@ -83,9 +85,8 @@ for p in "${PLUGINS[@]}"; do
   claude plugin eval "plugins/$p" \
     --trust-plugin --scaffold --ablation none --no-publish \
     --threshold "$EVAL_THRESHOLD" --max-cost-usd "$EVAL_MAX_COST" "${runs_flag[@]}" \
-    --allow-tools Write Edit WebFetch WebSearch Agent \
-      "Bash(git:*)" "Bash(ls:*)" "Bash(cp:*)" "Bash(mkdir:*)" "Bash(cat:*)" \
-      "Bash(python3:*)" "Bash(pandoc:*)" "Bash(soffice:*)" "Bash(md5sum:*)" \
+    --concurrency "${EVAL_CONCURRENCY:-3}" \
+    --allow-tools Write Edit WebFetch WebSearch Agent Bash \
     --json "$outdir/$p.json" >"$outdir/$p.log" 2>&1
   code=$?
   summary=$(python3 -I - "$outdir/$p.json" "$EVAL_THRESHOLD" <<'PY' 2>/dev/null

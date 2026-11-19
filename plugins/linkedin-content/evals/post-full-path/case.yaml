@@ -2,11 +2,11 @@ schema_version: "1.1"
 name: post-full-path
 description: "linkedin-post runs brief, draft, humanizer and gate, and saves learned patterns only to profile/"
 tags: [core]
-runs: 1
+runs: 3
 execution:
   prompt: |
     Help me write a LinkedIn post about the carrier onboarding story. Everything you need is in my story bank: I sat with the onboarding desk for a week, saw insurance documents sitting in an inbox, and we automated insurance checks with two providers. Onboarding went from 9 days to 2 and drop-off from 30% to 11% in one quarter. Don't ask me questions, draft it now and take it all the way through.
-  max_turns: 50
+  max_turns: 60
   timeout_seconds: 900
   allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Bash(ls:*), Bash(mkdir:*)]
 context:
@@ -22,19 +22,43 @@ graders:
     pattern: "RULES: *[0-5]/5"
   - name: check-table-smallest-fix-column
     type: regex
+    weight: 1
     flags: i
     pattern: "Smallest fix"
+  - name: playbook-loaded
+    type: tool_used
+    tool: Skill
+    min: 1
+    input_match: "linkedin-funnel-playbook"
   - name: humanizer-loaded
     type: tool_used
     tool: Skill
     min: 1
     input_match: "the-humanizer"
-  - name: post-quality
+  - name: post-saved
+    type: file_exists
+    path: posts/*.md
+    exists: true
+  - name: post-uses-real-numbers
     type: llm
-    weight: 3
+    weight: 2
     criteria: |
-      Find the final LinkedIn post in the reply. PASS only if all hold: it is about carrier onboarding going from 9 days to 2 (facts from Maya's profile, nothing invented beyond [verify] markers); it contains no em-dash characters and no emojis; its first paragraph (before the first blank line) is under about 210 characters and opens on a concrete scene, number or event; it does not end with engagement bait like 'Agree?' or 'Thoughts?'. FAIL if any fails.
-
+      Find the final LinkedIn post. PASS if it is about carrier onboarding and its numbers match the user's: 9 days to 2, and drop-off 30% to 11%. FAIL if any number in the post contradicts these.
+  - name: post-no-em-dash-or-emoji
+    type: llm
+    weight: 1
+    criteria: |
+      Look only at the final LinkedIn post itself (not tables or notes around it). PASS if it contains no em-dash character and no emoji. FAIL otherwise.
+  - name: post-strong-opening
+    type: llm
+    weight: 1
+    criteria: |
+      Look only at the final LinkedIn post. PASS if its first paragraph (before the first blank line) is roughly 210 characters or fewer and opens on a concrete number, scene or event rather than a general claim. FAIL otherwise.
+  - name: post-no-bait-close
+    type: llm
+    weight: 1
+    criteria: |
+      Look only at the final LinkedIn post. PASS if it does not end on engagement bait such as 'Agree?', 'Thoughts?' or 'Like if...'. A specific question about the reader's own experience is fine. FAIL otherwise.
   - name: never-edits-plugin-files
     type: tool_used
     arm: both

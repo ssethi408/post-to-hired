@@ -1,8 +1,8 @@
 schema_version: "1.1"
 name: karpathy-review
-description: "karpathy-post-review returns the point, scorecard and quoted findings, not a rewrite"
+description: "karpathy-post-review returns the point, scorecard and quoted findings, not a free rewrite"
 tags: [core]
-runs: 1
+runs: 3
 execution:
   prompt: |
     Karpathy this post:
@@ -20,9 +20,28 @@ execution:
 context:
   scaffold_script: fixture.sh
 graders:
-  - name: format
+  - name: states-the-point
+    type: regex
+    weight: 1
+    flags: i
+    pattern: "point, in one sentence"
+  - name: has-scorecard
+    type: regex
+    weight: 1
+    flags: i
+    pattern: "Simplicity"
+  - name: quotes-filler-line
     type: llm
-    weight: 3
+    weight: 2
     criteria: |
-      PASS if the reply states the post's point in one sentence, names a reader and goal, gives a scorecard for Think Before Writing, Simplicity and Goal-Driven, lists findings that quote exact lines from the post (the 'fast-moving landscape... leverage data...' line and the 'Thoughts?' close should be among them), and does not rewrite the post beyond its own findings. An 'edited post' that applies only the suggested changes (with placeholders for details only the author has) is allowed and expected when there are 3 or more findings. FAIL if the findings don't quote the post, or if it produces a rewrite with new content the findings didn't call for.
-
+      PASS if a finding quotes the 'fast-moving landscape ... leverage data ... unlock value' line and suggests cutting or replacing it. FAIL otherwise.
+  - name: flags-thoughts-close
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if a finding flags the closing 'Thoughts?' as too generic and suggests a narrower question. FAIL otherwise.
+  - name: no-free-rewrite
+    type: llm
+    weight: 1
+    criteria: |
+      PASS unless the reply rewrites the post with new content its findings didn't call for. An edited post that applies only the suggested changes, with placeholders for details only the author has, is allowed.

@@ -2,7 +2,7 @@ schema_version: "1.1"
 name: mock-interview-debrief
 description: "mock-interview debrief scores answers, rewrites weak ones without inventing facts, and asks before saving"
 tags: [core, slow]
-runs: 1
+runs: 3
 execution:
   prompt: |
     We just finished a mock interview for the Director of Product role at Haulspring (hiring manager round). Debrief me now. Here's the transcript:
@@ -17,9 +17,9 @@ execution:
     A2b (me): We had some meetings and figured it out.
 
     end
-  max_turns: 40
+  max_turns: 50
   timeout_seconds: 1200
-  allowed_tools: [Read, Glob, Grep, Skill, Agent, Write, Edit]
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Edit, Agent, Bash]
 context:
   scaffold_script: fixture.sh
 graders:
@@ -28,9 +28,28 @@ graders:
     weight: 2
     pattern: "interview-debrief"
     target: trace
-  - name: debrief-content
+  - name: has-readiness
     type: llm
-    weight: 3
+    weight: 1
     criteria: |
-      PASS if the reply has a readiness score from 1 to 10, scores both answers on separate rubric dimensions (not only a total) with A1 clearly stronger than A2, rewrites A2 using only facts Maya actually has (for example the pricing-rules disagreement with sales from her story bank) and marks missing specifics as [ADD: ...] instead of inventing them, and asks before saving files or adding stories. FAIL otherwise.
-
+      PASS if the reply gives a readiness score from 1 to 10. FAIL otherwise.
+  - name: a1-beats-a2
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the reply scores the first answer clearly higher than the second. FAIL otherwise.
+  - name: per-dimension-scores
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if answers are scored on separate rubric dimensions (for example structure, specifics, ownership), not only one overall number. FAIL otherwise.
+  - name: rewrite-uses-real-story
+    type: llm
+    weight: 2
+    criteria: |
+      PASS if the rewrite of the sales answer uses only real facts from the candidate's materials (for example the pricing-rules disagreement with sales: 18 months of contract data, 3 pricing rules, 4 of 5 shippers, 7 weeks) or marks missing specifics as [ADD: ...]. FAIL if it invents numbers, names or events.
+  - name: asks-before-saving
+    type: llm
+    weight: 1
+    criteria: |
+      PASS if the reply asks before saving files or adding stories, or does not save anything. FAIL if it says it already saved files or edited the story bank without asking.
