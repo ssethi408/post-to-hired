@@ -1,6 +1,7 @@
 # Your personal data. Never commit it.
 profile/
 tracker/
+posts/
 *.docx
 *.pdf
 .DS_Store

@@ -68,6 +68,12 @@ if [ "$fail" -ne 0 ]; then
 fi
 
 step "4/4 Evals (all cases, all plugins)"
+# The eval runner only grants shell access inside a sandbox. On Linux that needs bubblewrap and socat
+# (macOS has its sandbox built in). Without them every case with shell access is refused, not run.
+if [ "$(uname -s)" = "Linux" ] && ! { command -v bwrap >/dev/null && command -v socat >/dev/null; }; then
+  bad "eval sandbox missing: install bubblewrap and socat (e.g. sudo apt-get install -y bubblewrap socat)"
+  exit 1
+fi
 EVAL_THRESHOLD="${EVAL_THRESHOLD:-0.8}"
 EVAL_MAX_COST="${EVAL_MAX_COST:-15}"
 runs_flag=(); [ -n "${EVAL_RUNS:-}" ] && runs_flag=(--runs "$EVAL_RUNS")

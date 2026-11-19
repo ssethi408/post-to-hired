@@ -23,8 +23,13 @@ graders:
     weight: 2
     pattern: "Fernwick"
     target: {source: file, path: tracker/pipeline.csv}
+  - name: rereads-tracker
+    type: tool_used
+    tool: Read
+    min: 1
+    input_match: "pipeline\\.csv"
   - name: next-step-and-due
     type: llm
     criteria: |
-      PASS if the reply confirms the row and gives a next step with a due date (for example sending the drafted outreach), and lists follow-ups due this week. FAIL otherwise.
+      PASS if the reply confirms the row, gives a next step with a due date written as an actual calendar date (not only 'this week' or 'next week'), and lists which follow-ups are due. FAIL otherwise.
 

@@ -20,6 +20,10 @@ graders:
     type: regex
     weight: 1
     pattern: "RULES: *[0-5]/5"
+  - name: check-table-smallest-fix-column
+    type: regex
+    flags: i
+    pattern: "Smallest fix"
   - name: humanizer-loaded
     type: tool_used
     tool: Skill

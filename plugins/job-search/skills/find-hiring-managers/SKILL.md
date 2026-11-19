@@ -28,6 +28,8 @@ Tell them to paste each promising post (or the post's text plus the poster's nam
 
 ## Mode 2: Qualify
 
+Read `profile/targets.md`, `profile/voice.md` and `profile/about-me.md` from the working folder you were started in. Never search other folders or the rest of the computer for a profile. If `profile/` is missing, say so and offer the `setup` skill (it may be listed as `setup:setup`).
+
 For each post or listing the user pastes:
 
 1. **Extract:** poster name, poster title, company, role being hired, level, location / remote, the date posted, and any link to a job listing.

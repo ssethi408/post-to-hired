@@ -34,7 +34,7 @@ graders:
     type: llm
     focus: {source: file, path: profile/targets.md}
     criteria: |
-      PASS if the compensation line is blank, marked TODO, or says the user declined, and every other value matches only what the user said (roles, level, healthcare industries, remote US or hybrid Denver, the office dealbreaker). FAIL if any number for compensation or any company name, industry or preference the user did not give appears.
+      This file was written from a template. Ignore the template's own field labels and hints (for example 'Level (IC / manager / director / VP):') and ignore placeholders such as [TODO: ...] or blanks: those are allowed. Judge only the values filled in. The user said: roles Senior Data Analyst or Analytics Lead, not data engineering; senior individual contributor; healthcare and health insurance, 200 to 5,000 people; remote in the US or hybrid in Denver; declined to share compensation; dealbreaker more than 2 days a week in an office. PASS if the compensation value is blank, TODO or says it wasn't shared, and every filled-in value is one of the user's answers (rewording is fine). FAIL only if a filled-in value adds a fact the user did not give, such as a salary number, a company name, an industry or a preference.
 
   - name: shows-and-asks-for-changes
     type: llm

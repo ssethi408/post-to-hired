@@ -36,13 +36,14 @@ If the transcript was spoken (dictation or voice), also note filler words, resta
 1. Score every answer. One-line reason per score that quotes the answer.
 2. Note where follow-ups were needed and what they exposed.
 3. **Resume consistency:** flag any claim that contradicts the resume, inflates it (bigger number, bigger title, sole credit for team work), or is not in it. Not-in-resume is fine if true; flag it so the candidate can decide whether to add it.
-4. **Rewrites:** take the 2 to 3 lowest-scoring answers and rewrite each in the candidate's voice (`profile/voice.md`). Use only facts from the transcript, resume, or `profile/about-me.md`. Where a stronger answer needs a fact you do not have, write `[ADD: what is needed]`. Keep each rewrite speakable: short sentences, no em-dashes, no jargon the candidate did not use.
-5. **Stories to save:** new stories or details from the answers that are not in `profile/about-me.md` yet, each as one line with the detail that makes it work.
-6. **Readiness:** 1 to 10 for this stage, and the single change that would raise it most.
-7. **Next drill:** the question type to practice next and why.
+4. **Interviewer facts:** if the interviewer in the transcript stated company or team facts that aren't in the job posting or the prep brief, don't use them in rewrites or advice.
+5. **Rewrites:** take the 2 to 3 lowest-scoring answers and rewrite each in the candidate's voice (`profile/voice.md`). Use only facts from the transcript, resume, or `profile/about-me.md`. Where a stronger answer needs a fact you do not have, write `[ADD: what is needed]`. Keep each rewrite speakable: short sentences, no em-dashes, no jargon the candidate did not use.
+6. **Stories to save:** new stories or details from the answers that are not in `profile/about-me.md` yet, each as one line with the detail that makes it work.
+7. **Readiness:** 1 to 10 for this stage, and the single change that would raise it most.
+8. **Next drill:** the question type to practice next and why.
 
 ## Output
 
-Markdown with these sections, in order: `Readiness`, `Scorecard` (table: # / question / scores / total / one-line note), `What the follow-ups exposed`, `Rewrites`, `Resume consistency`, `Stories to save`, `Next drill`.
+Markdown with these sections, in order: `Readiness`, `Scorecard` (table: # / question / one column per rubric dimension, each 1 to 5 / total / one-line note), `What the follow-ups exposed`, `Rewrites`, `Resume consistency`, `Stories to save`, `Next drill`.
 
 Be direct. Quote the answers. No praise padding; if an answer was strong, say so in one line and say why.

@@ -32,7 +32,7 @@ Ask in one message:
 4. **What they can share up front:** resume file, 2 or 3 posts or emails they wrote, their LinkedIn About section or profile PDF.
 5. **Or try the example first?** Load the fictional Maya Okafor profile so they can test the other skills right away and set up their own later.
 
-**Loading the example:** copy every `.md` file from `example/maya-okafor/` except `README.md` into `profile/` in the working folder. Then add this first line to each copied file: `<!-- EXAMPLE PROFILE: fictional. Run setup again to replace it with your own. -->`. Tell the user the profile is fictional and that any skill they run will write as Maya until they replace it. Resume tailoring and mock interviews also need a real resume: Maya's `example/maya-okafor/settings.md` points to a file that doesn't exist, so the user should set RESUME_SOURCE in `profile/settings.md` before trying those. When they later run setup for real, treat files that still have that first line as safe to replace, and say so before replacing them.
+**Loading the example:** copy every `.md` file from `example/maya-okafor/` except `README.md` into `profile/` in the working folder. Copy each one with Read and Write rather than shell commands, so it works the same everywhere and needs no shell permission. Then add this first line to each copied file: `<!-- EXAMPLE PROFILE: fictional. Run setup again to replace it with your own. -->`. Tell the user the profile is fictional and that any skill they run will write as Maya until they replace it. Resume tailoring and mock interviews also need a real resume: Maya's `example/maya-okafor/settings.md` points to a file that doesn't exist, so the user should set RESUME_SOURCE in `profile/settings.md` before trying those. When they later run setup for real, treat files that still have that first line as safe to replace, and say so before replacing them.
 
 If `profile/` already exists, read it, list which files are present, which have `[TODO]`s, and which are still the example profile, and offer to fill only the gaps. Never overwrite a file without asking.
 
@@ -113,8 +113,8 @@ Only if they use mock interviews and their field has its own bar. Ask: "What doe
 
 ## Privacy check (always, before finishing)
 
-1. List every file written and its size.
-2. Check where `profile/` lives. If it's inside a git repository, check that `.gitignore` covers `profile/` and `tracker/`. If not, add those lines and say so. If the folder is inside a public repo the user doesn't control, warn them and suggest moving it.
+1. List every file written, as a short table: file / status.
+2. Check where `profile/` lives. If it's inside a git repository, check that `.gitignore` covers `profile/`, `tracker/` and `posts/` (where linkedin-post saves drafts). If not, add those lines and say so. If the folder is inside a public repo the user doesn't control, warn them and suggest moving it.
 3. Scan the files for anything that looks like a home address, phone number, personal email, account number, or someone else's private details (family, colleagues' performance). Ask the user whether each should stay.
 4. Remind them in one line: "Everything in profile/ stays on this computer. Nothing here is committed or shared unless you do it yourself."
 

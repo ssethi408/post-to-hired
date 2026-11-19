@@ -8,6 +8,8 @@ You don't need to clone or fork this repo to use it. Fork it only if you want to
 
 ## What's inside
 
+In Claude Code, each skill shows up with its plugin's name in front, for example `job-search:mock-interview`. You don't need to type the names: describe what you want and the right skill runs.
+
 **`setup` plugin**
 
 | Skill | What it does |
@@ -38,6 +40,14 @@ Interviewer styles included: recruiter screen, hiring manager, skeptical bar-rai
 
 ## Quickstart
 
+**Before you start:** you need Claude Code. Resume tailoring also needs Python with `python-docx` and LibreOffice (for the PDF), and works best with your resume as a `.docx`:
+
+```
+pip install python-docx
+```
+
+LibreOffice: install it from libreoffice.org, or `brew install --cask libreoffice` on a Mac. The first time a skill needs to run a command or write a file, Claude Code asks your permission. That's expected.
+
 **1. Install** (in Claude Code):
 
 ```
@@ -51,7 +61,7 @@ Only want one half? Install `setup` plus just that plugin. If the skills don't s
 
 **2. Make your profile.** Create a working folder for your job search (for example `~/job-search`), start Claude from it, and say *"set me up"*. The `setup` skill interviews you in short rounds, pulls what it can from your resume and a few things you've written, and writes your `profile/` folder there. Quick mode takes about 10 minutes, full mode about 30. You can stop after any round and pick it up later.
 
-Want to try the skills before writing anything about yourself? Say *"set me up with the example profile"*. Setup loads a complete profile for Maya Okafor, a fictional product manager, and marks it as the example. Run setup again when you're ready, and it replaces Maya with you.
+Want to try the skills before writing anything about yourself? Say *"set me up with the example profile"*. Setup loads a complete profile for Maya Okafor, a fictional product manager, and marks it as the example. The LinkedIn skills, hiring-manager outreach and the tracker work with it straight away. Resume tailoring and mock interviews also need a resume file, so point `RESUME_SOURCE` in `profile/settings.md` at a real `.docx` first. Run setup again when you're ready, and it replaces Maya with you.
 
 Prefer to fill it in by hand? The blank templates are in [`plugins/setup/skills/setup/templates/`](plugins/setup/skills/setup/templates/) and Maya's finished profile is in [`plugins/setup/skills/setup/example/maya-okafor/`](plugins/setup/skills/setup/example/maya-okafor/). Copy the templates into `profile/` and fill them in.
 
@@ -68,6 +78,8 @@ job-search/
     ├── calibration-posts.md      created by the playbook as you post
     └── interviewer-styles/       styles you add
 ```
+
+The skills also create `tracker/` (your pipeline) and `posts/` (your finished LinkedIn posts) next to `profile/`. If your working folder is a git repository, setup adds all three to its `.gitignore`.
 
 Everything the skills learn about you is saved in `profile/`, never inside the plugins, so plugin updates never wipe it.
 
@@ -98,7 +110,7 @@ Your profile holds your resume, your stories and your targets. It never belongs 
 
 - It stays in your working folder on your own computer. Claude reads it during a session like any other file you work with, but no skill commits, publishes or sends it anywhere else.
 - If your working folder is a git repository, setup checks that `profile/` and `tracker/` are in its `.gitignore`.
-- This repo's own `.gitignore` blocks `profile/`, `tracker/`, `*.docx`, `*.pdf` and any call-notes file. If you fork it, check `git status` before every push.
+- This repo's own `.gitignore` blocks `profile/`, `tracker/`, `posts/`, `*.docx`, `*.pdf` and any call-notes file. If you fork it, check `git status` before every push.
 - The proof bank in `author.md` marks every fact as shareable or not. Anything internal to an employer stays not shareable until you decide otherwise.
 
 ## A note on LinkedIn

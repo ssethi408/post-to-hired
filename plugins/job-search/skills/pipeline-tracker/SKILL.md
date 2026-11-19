@@ -9,6 +9,8 @@ One row per opportunity. Every other skill in `job-search` reads from it or writ
 
 ## Where the tracker lives
 
+Read `profile/settings.md` in the working folder you were started in. Never search other folders or the rest of the computer for a profile or tracker; if `profile/` is missing, say so and offer the `setup` skill (it may be listed as `setup:setup`).
+
 Read `TRACKER` from `profile/settings.md`. It can be:
 
 - **A local CSV** (default): `tracker/pipeline.csv` in the working folder. It's gitignored, so it never ends up in a repo.
@@ -49,6 +51,8 @@ Updates from other skills:
 - `find-hiring-managers` → new rows at stage `Lead` or `Contacted`
 
 ### Follow-ups due
+Always re-read TRACKER before answering; never answer from memory of the conversation. Give every due date as an actual date with its weekday ("Tue Nov 25"), not "this week" or "next week" alone, and use today's date to decide what is due.
+
 Flag every row where `next_step_due` is today or earlier, and every row stuck in one stage too long. Default timing:
 
 | Stage | Nudge after |

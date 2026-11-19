@@ -7,7 +7,7 @@ description: "Tailor the user's master resume to a job description, review it wi
 
 ## Settings
 
-Read these from `profile/settings.md` in the user's working folder (the `setup` skill writes it). If the file or a value is missing, ask the user once and offer to save the answer there.
+Read these from `profile/settings.md` in the working folder you were started in (the `setup` skill writes it). Never search other folders or the rest of the computer for a profile. If the file or a value is missing, ask the user once and offer to save the answer there.
 
 - RESUME_SOURCE: path to the user's master resume (.docx)
 - APPLICATIONS_ROOT: folder where tailored resumes are saved
@@ -39,10 +39,10 @@ Edit only what improves fit. Keep every fact true.
 ## Step 4: Review with the user (required, do not skip)
 Show the user, in chat:
 1. The full tailored resume text.
-2. A short change summary: what moved, what was reworded, what was cut.
+2. A short change summary: what moved, what was reworded, what was cut, and a **New wording not in RESUME_SOURCE** list: every phrase or claim that can't be traced word for word or in plain meaning to RESUME_SOURCE or `profile/about-me.md` (for example a new description of the company, a new collaborator, a new skill). Each item stays only if the user says yes. If there are none, say "none".
 3. The fit table from Step 2.
 4. For each Gap or weak Partial, ask whether they have real experience not in the resume that would close it, and ask for specifics (counts, scope, named partners) that would make new bullets stronger. Only add what they confirm.
-Apply their edits and show what changed. Once the text is close, build the PDF (Step 5.2) and send it as a preview so they see the real layout. Repeat until the user explicitly approves. Do not write anything to their computer before approval.
+Apply their edits and show what changed. Once the text is close, build a preview PDF (Step 5.2) in a temporary folder outside APPLICATIONS_ROOT (for example the system temp directory) and send it so they see the real layout. Repeat until the user explicitly approves. Nothing goes into APPLICATIONS_ROOT, and RESUME_SOURCE is never touched, before approval.
 
 ## Step 5: Build and save
 1. Build the folder path: APPLICATIONS_ROOT/{Company}/{Role} - {YYYY-MM}

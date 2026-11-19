@@ -22,6 +22,8 @@ Keep: one question per turn, no feedback during the interview, no invented facts
 
 ## Phase 0: Setup
 
+Read `profile/` from the working folder you were started in; never search other folders for a profile. If it's missing, offer the `setup` skill.
+
 Ask in one message, skipping anything already known from the conversation or the tracker:
 
 1. **Company and role.** If the tracker or `APPLICATIONS_ROOT` (from `profile/settings.md`) has a folder for this role, use its job description and tailored resume. Otherwise ask for the job posting (URL or pasted text).
@@ -41,6 +43,8 @@ Show the user a short version: the 3 things this interviewer most needs to hear 
 ## Phase 2: Interview
 
 Read the style file and stay in that interviewer's voice for the whole interview.
+
+**Facts about the company, team and role come only from the job posting, the prep brief (which cites its sources) and what the user told you.** Do not invent team size, headcount, org structure, strategy, problems, products or anything else to make the interviewer sound real. If the interviewer would naturally share context you don't have, keep it general ("we're growing the carrier side") or skip it. The debrief must not build on anything the interviewer said that isn't in those sources.
 
 - Open the way that interviewer would: a short intro, then the first question.
 - **One question per turn.** Wait for the answer.

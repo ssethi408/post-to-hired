@@ -32,5 +32,5 @@ graders:
     type: llm
     weight: 3
     criteria: |
-      PASS if the reply has a readiness score from 1 to 10, scores both answers with A1 clearly stronger than A2, rewrites A2 using only facts Maya actually has (for example the pricing-rules disagreement with sales from her story bank) and marks missing specifics as [ADD: ...] instead of inventing them, and asks before saving files or adding stories. FAIL otherwise.
+      PASS if the reply has a readiness score from 1 to 10, scores both answers on separate rubric dimensions (not only a total) with A1 clearly stronger than A2, rewrites A2 using only facts Maya actually has (for example the pricing-rules disagreement with sales from her story bank) and marks missing specifics as [ADD: ...] instead of inventing them, and asks before saving files or adding stories. FAIL otherwise.
 

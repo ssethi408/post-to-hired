@@ -103,12 +103,12 @@ Run the playbook's CHECK mode on the final rewritten post.
 In this order:
 
 1. The Phase 0 brief
-2. The final CHECK table
+2. The final CHECK table, exactly in the playbook's CHECK output format, including the "Smallest fix" column
 3. The final post
 4. A list of every `[verify]` item and any shareability advisory, if any
 5. The humanizer's Structured Review Report (Step 4) and Skill Update note (Step 6), collapsed to the essentials
 
-Save the final post as a markdown file and send it. The user copies it straight into LinkedIn.
+Save the final post as a markdown file in `posts/` in the working folder (for example `posts/2026-11-18-carrier-onboarding.md`) and send it. The user copies it straight into LinkedIn.
 
 When the user says a post went live, add it with its stage tag to the "last 3 posts" list in `profile/author.md`, so Rule 1 has real history next time. If they share how it did (comments from target readers, DMs, threads), note that too.
 

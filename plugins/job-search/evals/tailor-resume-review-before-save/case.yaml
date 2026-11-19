@@ -32,7 +32,7 @@ graders:
     type: llm
     weight: 3
     criteria: |
-      PASS if the reply includes a fit table that classifies requirements as Strong, Partial or Gap, shows tailored resume text, summarizes what changed, asks about gaps, and asks the user to approve before saving. FAIL if it says it saved the final resume to the applications folder, or invents employers, titles, dates or numbers not in Maya's resume (9 days to 2, 30% to 11%, 4%, 4 of 5 shippers, 7 weeks, 4 PMs, 11 years).
+      PASS if the reply includes a fit table that classifies requirements as Strong, Partial or Gap, shows tailored resume text, summarizes what changed, asks about gaps, includes a list of new wording or claims that are not in the source resume (or explicitly says there is none), and asks the user to approve before saving. FAIL if it says it saved the final resume to the applications folder, or invents employers, titles, dates or numbers not in Maya's resume (9 days to 2, 30% to 11%, 4%, 4 of 5 shippers, 7 weeks, 4 PMs, 11 years).
 
   - name: nothing-saved-to-applications
     type: file_exists

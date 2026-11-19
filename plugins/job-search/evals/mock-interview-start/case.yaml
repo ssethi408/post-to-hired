@@ -37,5 +37,5 @@ graders:
     type: llm
     weight: 3
     criteria: |
-      PASS if the reply gives a short prep summary (the few things to land and the gaps likely to be probed) without listing the planned interview questions, and then either asks 'ready to start?' or asks exactly one interview question in the hiring manager's voice. FAIL if it lists the question plan, asks more than one interview question, or gives coaching on answers.
+      PASS if the reply gives a short prep summary (the few things to land and the gaps likely to be probed) without listing the planned interview questions, and then either asks 'ready to start?' or asks exactly one interview question in the hiring manager's voice. FAIL if it lists the question plan, asks more than one interview question, gives coaching on answers, or has the interviewer state specific company or team facts that are not in the posting (for example team size or headcount beyond '3 product managers', org structure, named internal problems or strategy). The posting says: Series C freight marketplace, 40,000 carriers, lead 3 PMs, own carrier onboarding, payments and the carrier mobile app, remote US.
 
